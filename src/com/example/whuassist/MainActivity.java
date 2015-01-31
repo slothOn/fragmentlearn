@@ -1,5 +1,6 @@
 package com.example.whuassist;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -77,12 +78,14 @@ public class MainActivity extends ActionBarActivity {
 				accout=nameedit.getText().toString();
 				password=passwordedit.getText().toString();
 				key=verifykey.getText().toString();
-				httputil.Loginweb(accout, password, key,new HttpCallbackListener() {
+				httputil.Loginweb("http://210.42.121.241/servlet/Login",accout, password, key,new HttpCallbackListener() {
 					
 					@Override
 					public void onFinish() {
 						// TODO Auto-generated method stub
 						Log.d("login", "successfully");
+						Intent i=new Intent(MainActivity.this,ScheduleActivity.class);
+						startActivity(i);
 					}
 					
 					@Override

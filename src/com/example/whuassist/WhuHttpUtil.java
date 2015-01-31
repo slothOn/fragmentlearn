@@ -3,6 +3,7 @@ package com.example.whuassist;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.CookieStore;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,24 +34,26 @@ public class WhuHttpUtil {
 		return whuhttputil;
 	}
 	static HttpClient client;
-	static String COOKIE="";
+	static CookieStore cookies;
+	public static String COOKIE="";
 	public Bitmap getcode() throws Exception{
 		HttpGet httpGet = new HttpGet("http://210.42.121.241/servlet/GenImg");
 		HttpResponse httpResponse = client.execute(httpGet);
+	
 		COOKIE = ((AbstractHttpClient) client).getCookieStore().getCookies().get(0).getValue();
 		byte[] bytes = EntityUtils.toByteArray(httpResponse.getEntity()); 
 		Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length); 
 		return bitmap; 
 	}
-	public void Loginweb(final String id,final String pwd,final String xdvfb,final HttpCallbackListener listener){
-		final String address="http://210.42.121.241/";
+	public void Loginweb(final String address,final String id,final String pwd,final String xdvfb,final HttpCallbackListener listener){
+//		final String address="http://210.42.121.241/servlet/Login";
 		
 		new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				String responsetxt;
+				//String responsetxt;
 				HttpPost post=new HttpPost(address);
 				List<NameValuePair> params=new ArrayList<NameValuePair>();
 				
@@ -62,6 +65,7 @@ public class WhuHttpUtil {
 					UrlEncodedFormEntity entity=new UrlEncodedFormEntity(params,"utf-8");
 					post.setEntity(entity);
 					post.setHeader("Cookie", "JESSIONID="+COOKIE);
+					Log.d("whuhttputil", COOKIE);
 					response=client.execute(post);
 					if(response.getStatusLine().getStatusCode()==200){
 //						HttpEntity entityback=response.getEntity();
@@ -69,14 +73,14 @@ public class WhuHttpUtil {
 //						Log.d("whu", responsetxt);
 						StringBuffer sb = new StringBuffer();
                         HttpEntity entityback = response.getEntity();
-                        String content = EntityUtils.toString(entityback);
                         InputStream is = entityback.getContent();
                         BufferedReader br = new BufferedReader(new InputStreamReader(is, "GBK"));
                         String data = "";
                         while ((data = br.readLine()) != null) {
                                 sb.append(data);
                         }
-                        Log.d("whu", sb.toString()); // 此时result中就是登陆后的页面的HTML的源代码
+                        Log.d("whu", sb.toString());
+                        // 此时result中就是登陆后的页面的HTML的源代码
 					}
 					listener.onFinish();
 				} catch (Exception e) {
