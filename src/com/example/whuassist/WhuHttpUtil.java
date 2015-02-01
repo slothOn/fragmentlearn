@@ -64,7 +64,7 @@ public class WhuHttpUtil {
 					HttpResponse response;
 					UrlEncodedFormEntity entity=new UrlEncodedFormEntity(params,"utf-8");
 					post.setEntity(entity);
-					post.setHeader("Cookie", "JESSIONID="+COOKIE);
+					post.setHeader("Cookie", "JSESSIONID="+COOKIE);
 					Log.d("whuhttputil", COOKIE);
 					response=client.execute(post);
 					if(response.getStatusLine().getStatusCode()==200){
