@@ -18,6 +18,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -33,6 +34,7 @@ public class ScheduleActivity extends Activity {
 	float creditAll=0;
 	//ArrayAdapter<String> dataList;
 	ArrayAdapter<Scoremodel> adapter;
+	TextView titletext;
 	private Handler handler=new Handler(){
 		@Override
 		public void handleMessage(Message msg) {
@@ -56,10 +58,14 @@ public class ScheduleActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.schedule_activity);
+		
 		listview=(ListView) findViewById(R.id.score_list);
 		btn_GPA=(Button) findViewById(R.id.btn_compute);
 		GPAshow=(TextView) findViewById(R.id.show_score);
+		titletext=(TextView) findViewById(R.id.title_text1);
+		titletext.setText("³É¼¨");
 		btn_GPA.setOnClickListener(new OnClickListener() {
 			
 			@Override
