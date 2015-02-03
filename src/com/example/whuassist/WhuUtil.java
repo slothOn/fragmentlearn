@@ -41,4 +41,12 @@ public class WhuUtil {
 	        courseScore.add(course);
 		}
 	}
+	public static boolean isLogin(String html){
+		Document doc=Jsoup.parse(html);
+		org.jsoup.nodes.Element nameelement=doc.getElementById("nameLable");
+		if(nameelement==null)
+			return false;
+		else
+			return true;
+	}
 }

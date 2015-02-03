@@ -25,12 +25,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class ScheduleActivity extends Activity {
-	//private TextView webtxt;
+	private final static int GET_PAGEREPLY=0;
+	private final static int GET_GPAFINISH=1;
+	
 	HttpResponse rsp;
 	TextView GPAshow;
 	ListView listview;
 	Button btn_GPA;
 	float GPA=0;
+	boolean isGPAComputed;
 	float creditAll=0;
 	//ArrayAdapter<String> dataList;
 	ArrayAdapter<Scoremodel> adapter;
@@ -40,11 +43,11 @@ public class ScheduleActivity extends Activity {
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
 			switch (msg.what) {
-			case 0:
+			case GET_PAGEREPLY:
 				//webtxt.setText((CharSequence) msg.obj);
 				adapter.notifyDataSetChanged();
 				break;
-			case 1:
+			case GET_GPAFINISH:
 				//webtxt.setText((CharSequence) msg.obj);
 				float g=(Float) msg.obj;
 				GPAshow.setText(String.valueOf(g));
@@ -54,23 +57,42 @@ public class ScheduleActivity extends Activity {
 			}
 		}
 	};
+	
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putBoolean("isgpacomputed", isGPAComputed);
+		outState.putFloat("gpa", GPA);
+	};
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onRestoreInstanceState(savedInstanceState);
+		isGPAComputed=savedInstanceState.getBoolean("isgpacomputed");
+		GPA=savedInstanceState.getFloat("gpa");
+		if(isGPAComputed){
+			GPAshow.setText(String.valueOf(GPA));
+		}
+	}
+	@Override
+	protected void onCreate(final Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.schedule_activity);
-		
 		listview=(ListView) findViewById(R.id.score_list);
 		btn_GPA=(Button) findViewById(R.id.btn_compute);
 		GPAshow=(TextView) findViewById(R.id.show_score);
 		titletext=(TextView) findViewById(R.id.title_text1);
 		titletext.setText("³É¼¨");
+		
+        
+		
 		btn_GPA.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
+				GPA=0;
+				creditAll=0;
 			    for(int i=0;i<WhuUtil.courseScore.size();i++){
 			    	Scoremodel scoremodel=WhuUtil.courseScore.get(i);
 			    	creditAll+=scoremodel.credit;
@@ -79,49 +101,35 @@ public class ScheduleActivity extends Activity {
 			    if(creditAll!=0)
 			    	GPA=GPA/creditAll;
 			    Message msg=new Message();
-			    msg.what=1;
+			    msg.what=GET_GPAFINISH;
 			    msg.obj=GPA;
 			    handler.sendMessage(msg);
+			    isGPAComputed=true;			    
+			    
+			    
 			}
 		});
 		adapter=new ArrayAdapter<Scoremodel>(this,android.R.layout.simple_list_item_1,WhuUtil.courseScore);
-		//webtxt=(TextView) findViewById(R.id.schedule_code);
+		
 		listview.setAdapter(adapter);
-		new Thread(new Runnable() {
+		WhuHttpUtil.getInstance().Loginweb("http://210.42.121.241/servlet/Svlt_QueryStuScore?year=0&term=&learnType=&scoreFlag=0", null, new HttpCallbackListener() {
 			
 			@Override
-			public void run() {
+			public void onFinish(String txt) {
 				// TODO Auto-generated method stub
-				HttpClient client=new DefaultHttpClient();
-				//HttpPost post=new HttpPost("http://210.42.121.241/stu/stu_score_parent.jsp");
-				//HttpPost post=new HttpPost("http://210.42.121.241/servlet/Svlt_QueryStuLsn?action=queryStuLsn");
-				Date t=new Date();
-				//HttpPost post=new HttpPost("http://210.42.121.241/servlet/Svlt_QueryStuScore?year=0&term=&learnType=&scoreFlag=0&t="+t.toString());
-				HttpPost post=new HttpPost("http://210.42.121.241/servlet/Svlt_QueryStuScore?year=0&term=&learnType=&scoreFlag=0");
-				post.setHeader("Cookie", "JSESSIONID="+WhuHttpUtil.COOKIE);
-				
-				try {
-					rsp=client.execute(post);
-					if(rsp.getStatusLine().getStatusCode()==200){
-						HttpEntity e=rsp.getEntity();
-						String txt=EntityUtils.toString(e);
-						Log.d("schedule", txt);
-						WhuUtil.scoreParse(txt);
-						Message msg=new Message();
-						msg.what=0;
-						//msg.obj=WhuUtil.courseScore;
-						handler.sendMessage(msg);
-					}
-				
-				} catch (ClientProtocolException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				Log.d("schedule", txt);
+				WhuUtil.scoreParse(txt);
+				Message msg=new Message();
+				msg.what=GET_PAGEREPLY;
+				handler.sendMessage(msg);
 			}
-		}).start();
+			
+			@Override
+			public void onError(String txt) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
 	}
 }

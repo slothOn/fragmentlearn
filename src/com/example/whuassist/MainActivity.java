@@ -1,5 +1,11 @@
 package com.example.whuassist;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -21,7 +27,10 @@ import android.widget.Toast;
 
 
 public class MainActivity extends ActionBarActivity {
-    private EditText nameedit;
+    private final static int GET_BMPKEY=0;
+	private final static int LOGIN_ERR=1;
+    
+	private EditText nameedit;
     private EditText passwordedit;
     private EditText verifykey;
     private Button loginbtn;
@@ -42,10 +51,12 @@ public class MainActivity extends ActionBarActivity {
     	public void handleMessage(Message msg) {
     		// TODO Auto-generated method stub
     		switch (msg.what) {
-			case 0:
+			case GET_BMPKEY:
 				imgview.setImageBitmap((Bitmap) msg.obj);
 				break;
-
+			case LOGIN_ERR:
+				Toast.makeText(MainActivity.this, "用户名密码错误/验证码输入有误", Toast.LENGTH_LONG)
+				.show();
 			default:
 				break;
 			}
@@ -85,7 +96,7 @@ public class MainActivity extends ActionBarActivity {
 					Bitmap bmp=httputil.getcode();
 					Message msg=new Message();
 					msg.obj=bmp;
-					msg.what=0;
+					msg.what=GET_BMPKEY;
 					handler.sendMessage(msg);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -111,21 +122,33 @@ public class MainActivity extends ActionBarActivity {
 				}else
 					editor.clear();
 				editor.commit();
-				
-				httputil.Loginweb("http://210.42.121.241/servlet/Login",accout, password, key,new HttpCallbackListener() {
+				Map<String, String> postmap=new HashMap<String, String>();
+				postmap.put("id", accout);
+				postmap.put("pwd", password);
+				postmap.put("xdvfb", key);
+				httputil.Loginweb("http://210.42.121.241/servlet/Login",postmap,new HttpCallbackListener() {
 					
 					@Override
-					public void onFinish() {
+					public void onFinish(String txt) {
 						// TODO Auto-generated method stub
 						Log.d("login", "successfully");
-						Intent i=new Intent(MainActivity.this,ScheduleActivity.class);
-						startActivity(i);
+						if(WhuUtil.isLogin(txt)){
+							Intent i=new Intent(MainActivity.this,ScheduleActivity.class);
+							startActivity(i);
+						}
+						else{
+							Log.d("login", "error");
+							Message msg=new Message();
+							msg.what=LOGIN_ERR;
+							handler.sendMessage(msg);
+						}
 					}
 					
 					@Override
-					public void onError() {
+					public void onError(String txt) {
 						// TODO Auto-generated method stub
 						Log.d("login", "unsuccessfully");
+						
 					}
 				});
 			}
