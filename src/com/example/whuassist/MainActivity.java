@@ -3,6 +3,7 @@ package com.example.whuassist;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
@@ -13,7 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
+//import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,7 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
     private final static int GET_BMPKEY=0;
 	private final static int LOGIN_ERR=1;
     
@@ -74,7 +75,7 @@ public class MainActivity extends ActionBarActivity {
         passwordedit=(EditText) findViewById(R.id.password);
         loginbtn=(Button) findViewById(R.id.btn_login);
         verifykey=(EditText)findViewById(R.id.verify_key);
-        titletext=(TextView) findViewById(R.id.title_text);
+        titletext=(TextView) findViewById(R.id.id_title);
         titletext.setText("ÇëµÇÂ¼");
         
         checkbox=(CheckBox) findViewById(R.id.remember_pass);
@@ -133,7 +134,7 @@ public class MainActivity extends ActionBarActivity {
 						// TODO Auto-generated method stub
 						Log.d("login", "successfully");
 						if(WhuUtil.isLogin(txt)){
-							Intent i=new Intent(MainActivity.this,ScheduleActivity.class);
+							Intent i=new Intent(MainActivity.this,FuncActivity.class);
 							startActivity(i);
 						}
 						else{

@@ -3,18 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
     android:stretchColumns="1">
-    <RelativeLayout 
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#484E61">
-        <TextView 
-            android:id="@+id/title_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="#fff"
-            android:textSize="24sp"/>
-    </RelativeLayout>
+    <include layout="@layout/title"/>"
     <TableRow>
         <TextView 
             android:layout_height="wrap_content"
@@ -61,11 +50,16 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="20dp"
-            android:orientation="vertical" >
+            android:orientation="horizontal" >
 
             <ImageView
                 android:id="@+id/login_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+             <ImageButton 
+                 android:id="@+id/id_refreshcode"
+                 
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"/>"
         </LinearLayout>
 </TableLayout>

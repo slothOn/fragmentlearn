@@ -1,30 +1,24 @@
 package com.example.whuassist;
 
-import java.io.IOException;
-import java.util.Date;
-
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ScheduleActivity extends Activity {
+public class ScoreFragment extends Fragment {
 	private final static int GET_PAGEREPLY=0;
 	private final static int GET_GPAFINISH=1;
 	
@@ -57,37 +51,22 @@ public class ScheduleActivity extends Activity {
 			}
 		}
 	};
-	
-	protected void onSaveInstanceState(Bundle outState) {
-		outState.putBoolean("isgpacomputed", isGPAComputed);
-		outState.putFloat("gpa", GPA);
-	};
 	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    public void onAttach(Activity activity) {
 		// TODO Auto-generated method stub
-		//先create再restore
-		super.onRestoreInstanceState(savedInstanceState);
-		isGPAComputed=savedInstanceState.getBoolean("isgpacomputed");
-		GPA=savedInstanceState.getFloat("gpa");
-		if(isGPAComputed){
-			GPAshow.setText(String.valueOf(GPA));
-		}
-	}
+    	super.onAttach(activity);
+    	adapter=new ArrayAdapter<Scoremodel>(activity,
+    			android.R.layout.simple_list_item_1,WhuUtil.courseScore);
+    };
 	@Override
-	protected void onCreate(final Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.schedule_activity);
-		listview=(ListView) findViewById(R.id.score_list);
-		btn_GPA=(Button) findViewById(R.id.btn_compute);
-		GPAshow=(TextView) findViewById(R.id.show_score);
-		titletext=(TextView) findViewById(R.id.title_text1);
-		titletext.setText("成绩");
-		
-        
-		
-		btn_GPA.setOnClickListener(new OnClickListener() {
+		View v=inflater.inflate(R.layout.score_fragment, null);
+		listview=(ListView)v.findViewById(R.id.score_list);
+		btn_GPA=(Button)v.findViewById(R.id.btn_compute);
+		GPAshow=(TextView)v.findViewById(R.id.show_score);
+        btn_GPA.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
@@ -105,32 +84,44 @@ public class ScheduleActivity extends Activity {
 			    msg.what=GET_GPAFINISH;
 			    msg.obj=GPA;
 			    handler.sendMessage(msg);
-			    isGPAComputed=true;			    
-			    
-			    
+			    isGPAComputed=true;			        
 			}
 		});
-		adapter=new ArrayAdapter<Scoremodel>(this,android.R.layout.simple_list_item_1,WhuUtil.courseScore);
-		
 		listview.setAdapter(adapter);
-		WhuHttpUtil.getInstance().Loginweb("http://210.42.121.241/servlet/Svlt_QueryStuScore?year=0&term=&learnType=&scoreFlag=0", null, new HttpCallbackListener() {
-			
-			@Override
-			public void onFinish(String txt) {
-				// TODO Auto-generated method stub
-				Log.d("schedule", txt);
-				WhuUtil.scoreParse(txt);
-				Message msg=new Message();
-				msg.what=GET_PAGEREPLY;
-				handler.sendMessage(msg);
-			}
-			
-			@Override
-			public void onError(String txt) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
 		
+		WhuHttpUtil.getInstance().Loginweb("http://210.42.121.241/servlet/Svlt_QueryStuScore?year=0&term=&learnType=&scoreFlag=0", null, new HttpCallbackListener() {
+				
+				@Override
+				public void onFinish(String txt) {
+					// TODO Auto-generated method stub
+					Log.d("schedule", txt);
+					WhuUtil.scoreParse(txt);
+					Message msg=new Message();
+					msg.what=GET_PAGEREPLY;
+					handler.sendMessage(msg);
+				}
+				
+				@Override
+				public void onError(String txt) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+		return v;
 	}
+	public void onSaveInstanceState(Bundle outState) {
+		outState.putBoolean("isgpacomputed", isGPAComputed);
+		outState.putFloat("gpa", GPA);
+	};
+//	@Override
+//	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//		// TODO Auto-generated method stub
+//		//先create再restore
+//		super.onRestoreInstanceState(savedInstanceState);
+//		isGPAComputed=savedInstanceState.getBoolean("isgpacomputed");
+//		GPA=savedInstanceState.getFloat("gpa");
+//		if(isGPAComputed){
+//			GPAshow.setText(String.valueOf(GPA));
+//		}
+//	}
 }
