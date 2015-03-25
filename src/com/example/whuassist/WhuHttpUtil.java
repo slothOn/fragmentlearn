@@ -40,6 +40,7 @@ public class WhuHttpUtil {
 	static CookieStore cookies;
 	public static String COOKIE="";
 	public Bitmap getcode() throws Exception{
+		
 		HttpGet httpGet = new HttpGet("http://210.42.121.241/servlet/GenImg");
 		HttpResponse httpResponse = client.execute(httpGet);
 	

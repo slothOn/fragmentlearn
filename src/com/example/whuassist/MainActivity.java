@@ -22,6 +22,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
     private final static int GET_BMPKEY=0;
 	private final static int LOGIN_ERR=1;
+    private final static int SHUAXIN_KEY=2;
     
 	private EditText nameedit;
     private EditText passwordedit;
@@ -43,6 +45,7 @@ public class MainActivity extends Activity {
     public String accout;
     public String password;
     public String key;
+    public ImageButton sximgbtn;
     
     HttpCallbackListener listener;
     WhuHttpUtil httputil;
@@ -58,6 +61,9 @@ public class MainActivity extends Activity {
 			case LOGIN_ERR:
 				Toast.makeText(MainActivity.this, "用户名密码错误/验证码输入有误", Toast.LENGTH_LONG)
 				.show();
+			case SHUAXIN_KEY:
+				imgview.setImageBitmap((Bitmap) msg.obj);
+				break;
 			default:
 				break;
 			}
@@ -77,7 +83,7 @@ public class MainActivity extends Activity {
         verifykey=(EditText)findViewById(R.id.verify_key);
         titletext=(TextView) findViewById(R.id.id_title);
         titletext.setText("请登录");
-        
+        sximgbtn=(ImageButton) findViewById(R.id.id_refreshcode);
         checkbox=(CheckBox) findViewById(R.id.remember_pass);
         boolean isremember=pref.getBoolean("isremember", false);
         if(isremember){
@@ -152,6 +158,31 @@ public class MainActivity extends Activity {
 						
 					}
 				});
+			}
+		});
+        sximgbtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						try {
+							Bitmap bmp=httputil.getcode();
+							Message msg=new Message();
+							msg.obj=bmp;
+							msg.what=SHUAXIN_KEY;
+							handler.sendMessage(msg);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}).start();
+				
 			}
 		});
     }

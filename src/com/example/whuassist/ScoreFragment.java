@@ -1,9 +1,12 @@
 package com.example.whuassist;
 
+import java.util.ArrayList;
+
 import org.apache.http.HttpResponse;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -26,7 +29,9 @@ public class ScoreFragment extends Fragment {
 	TextView GPAshow;
 	ListView listview;
 	Button btn_GPA;
+	ProgressDialog progressdlg;
 	float GPA=0;
+	
 	boolean isGPAComputed;
 	float creditAll=0;
 	//ArrayAdapter<String> dataList;
@@ -58,6 +63,19 @@ public class ScoreFragment extends Fragment {
     	adapter=new ArrayAdapter<Scoremodel>(activity,
     			android.R.layout.simple_list_item_1,WhuUtil.courseScore);
     };
+    public void showProgressDlg(){
+    	if(progressdlg==null){
+    		progressdlg=new ProgressDialog(getActivity());
+    		progressdlg.setMessage("ÕýÔÚ¼ÓÔØ");
+    		progressdlg.setCanceledOnTouchOutside(false);
+    	}
+    	progressdlg.show();
+    }
+    public void closeProgressDlg(){
+    	if(progressdlg!=null){
+    		progressdlg.dismiss();
+    	}
+    }
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -66,6 +84,7 @@ public class ScoreFragment extends Fragment {
 		listview=(ListView)v.findViewById(R.id.score_list);
 		btn_GPA=(Button)v.findViewById(R.id.btn_compute);
 		GPAshow=(TextView)v.findViewById(R.id.show_score);
+		showProgressDlg();
         btn_GPA.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -73,8 +92,19 @@ public class ScoreFragment extends Fragment {
 				// TODO Auto-generated method stub
 				GPA=0;
 				creditAll=0;
+				ArrayList<String> namelist=new ArrayList<String>();
 			    for(int i=0;i<WhuUtil.courseScore.size();i++){
 			    	Scoremodel scoremodel=WhuUtil.courseScore.get(i);
+			    	if(scoremodel.score<60)
+			    		continue;
+			    	if(namelist.lastIndexOf(scoremodel.name)!=-1){
+			    		int j=namelist.lastIndexOf(scoremodel.name);
+			    		Scoremodel prescore=WhuUtil.courseScore.get(j);
+			    		creditAll-=prescore.credit;
+			    		GPA-=prescore.getGPA();
+			    		
+			    	}
+			    	namelist.add(scoremodel.name);
 			    	creditAll+=scoremodel.credit;
 			    	GPA+=scoremodel.getGPA()*scoremodel.credit;
 			    }
@@ -99,6 +129,7 @@ public class ScoreFragment extends Fragment {
 					Message msg=new Message();
 					msg.what=GET_PAGEREPLY;
 					handler.sendMessage(msg);
+					closeProgressDlg();
 				}
 				
 				@Override
