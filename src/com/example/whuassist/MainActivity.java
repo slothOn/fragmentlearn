@@ -32,6 +32,7 @@ public class MainActivity extends Activity {
     private final static int GET_BMPKEY=0;
 	private final static int LOGIN_ERR=1;
     private final static int SHUAXIN_KEY=2;
+    public static String Account;
     
 	private EditText nameedit;
     private EditText passwordedit;
@@ -139,6 +140,7 @@ public class MainActivity extends Activity {
 					public void onFinish(String txt) {
 						// TODO Auto-generated method stub
 						Log.d("login", "successfully");
+						Account=accout;
 						if(WhuUtil.isLogin(txt)){
 							Intent i=new Intent(MainActivity.this,FuncActivity.class);
 							startActivity(i);

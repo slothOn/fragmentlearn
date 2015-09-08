@@ -113,7 +113,9 @@ public class ScoreFragment extends Fragment {
 	
 	
 	public void saveScore2db(){
-		//sdbhelper=new ScoreTableHelper(getActivity(),"");
+		//数据库不存在则新建
+		sdbhelper=new ScoreTableHelper(getActivity(),"WHU"+MainActivity.Account+".db",null,1);
+		sdbhelper.getWritableDatabase();
 	}
 	
 	

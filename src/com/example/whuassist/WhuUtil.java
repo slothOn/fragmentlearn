@@ -16,6 +16,7 @@ import android.content.Context;
 import android.renderscript.Element;
 
 public class WhuUtil {
+	public static String name;
 	public static ArrayList<Scoremodel> courseScore=new ArrayList<Scoremodel>();
 	public static void saveToFile(Context c,String txt,String name) throws IOException{
 		OutputStream out=c.openFileOutput(name, Context.MODE_PRIVATE);
@@ -47,7 +48,10 @@ public class WhuUtil {
 		org.jsoup.nodes.Element nameelement=doc.getElementById("nameLable");
 		if(nameelement==null)
 			return false;
-		else
-			return true;
+		else{
+			name=nameelement.text();
+			
+			return true;	
+		}
 	}
 }

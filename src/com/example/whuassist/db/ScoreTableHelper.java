@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class ScoreTableHelper extends SQLiteOpenHelper {
 
-    public final static String CREATE_PROVINCE="create table Score ("+
-     "id integer primary key autoincrement,"+"province_name text,"+"province_code text)";
+    public final static String CREATE_SCORE="create table Score ("+
+     "id integer primary key autoincrement,"+"name text,credit integer,"+"score real)";
 	
 	public ScoreTableHelper(Context context, String name, CursorFactory factory,
 			int version) {
@@ -19,7 +19,7 @@ public class ScoreTableHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
-		
+		db.execSQL(CREATE_SCORE);
 	}
 
 	@Override
