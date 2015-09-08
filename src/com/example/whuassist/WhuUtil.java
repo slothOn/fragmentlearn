@@ -25,6 +25,7 @@ public class WhuUtil {
 			bfw.close();
 	}
 	public static void scoreParse(String html){
+		
 		Document doc=Jsoup.parse(html);
 		Elements tables=doc.getElementsByTag("table");
 		Elements tr=tables.get(0).getElementsByTag("tr");

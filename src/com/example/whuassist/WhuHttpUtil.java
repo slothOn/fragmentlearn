@@ -49,6 +49,41 @@ public class WhuHttpUtil {
 		Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length); 
 		return bitmap; 
 	}
+	
+	public String reqwebinfo(final String address,final Map<String, String> postmap){
+		String responsetxt="";
+		HttpPost post=new HttpPost(address);
+		List<NameValuePair> params=new ArrayList<NameValuePair>();
+		if(postmap!=null){
+			
+			Set<Map.Entry<String, String>> allset=postmap.entrySet();
+			Iterator<Map.Entry<String, String>> iter=allset.iterator();
+			while(iter.hasNext()){
+				Map.Entry<String, String> me=iter.next();
+				params.add(new BasicNameValuePair(me.getKey(), me.getValue()));
+   			}
+		}
+		
+		try {
+			HttpResponse response;
+			UrlEncodedFormEntity entity=new UrlEncodedFormEntity(params,"utf-8");
+			post.setEntity(entity);
+			post.setHeader("Cookie", "JSESSIONID="+COOKIE);
+			Log.d("whuhttputil", COOKIE);
+			response=client.execute(post);
+			if(response.getStatusLine().getStatusCode()==200){
+				HttpEntity entityback=response.getEntity();
+				responsetxt=EntityUtils.toString(entityback,"utf-8");
+				return responsetxt;
+			}
+			return null;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public void Loginweb(final String address,final Map<String, String> postmap,final HttpCallbackListener listener){
 //		final String address="http://210.42.121.241/servlet/Login";
 		
@@ -84,6 +119,7 @@ public class WhuHttpUtil {
 					}
 					if(listener!=null)
 					    listener.onFinish(responsetxt);
+					
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

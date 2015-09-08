@@ -24,8 +24,6 @@
         </activity>
         <activity 
             android:name=".FuncActivity"></activity>
-        <activity 
-            android:name=".ScheduleActivity"></activity>
         <service 
             android:name="com.example.whuassist.service.AutoUpdateService"></service>
         <receiver 
