@@ -9,6 +9,8 @@ import com.example.whuassist.db.ScoreTableHelper;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,7 +30,6 @@ import android.widget.Toast;
 public class ScoreFragment extends Fragment {
 	private ScoreTableHelper sdbhelper;
 	
-	HttpResponse rsp;
 	TextView GPAshow;
 	ListView listview;
 	Button btn_GPA;
@@ -45,6 +46,8 @@ public class ScoreFragment extends Fragment {
     public void onAttach(Activity activity) {
 		// TODO Auto-generated method stub
     	super.onAttach(activity);
+    	//数据库不存在则新建
+		sdbhelper=new ScoreTableHelper(getActivity(),"WHU"+MainActivity.Account+".db",null,1);
     	adapter=new ArrayAdapter<Scoremodel>(activity,
     			android.R.layout.simple_list_item_1,WhuUtil.courseScore);
     };
@@ -101,9 +104,11 @@ public class ScoreFragment extends Fragment {
 		});
         
 		listview.setAdapter(adapter);
+		
 		if(WhuUtil.courseScore.size()==0){
-			new DownloadScoreTask().execute();
+			queryScoreData();
 		}
+	
 		return v;
 	}
 	public void onSaveInstanceState(Bundle outState) {
@@ -111,14 +116,53 @@ public class ScoreFragment extends Fragment {
 		outState.putFloat("gpa", GPA);
 	}
 	
-	
+	//保存到数据库
 	public void saveScore2db(){
-		//数据库不存在则新建
-		sdbhelper=new ScoreTableHelper(getActivity(),"WHU"+MainActivity.Account+".db",null,1);
-		sdbhelper.getWritableDatabase();
+		SQLiteDatabase sdb=sdbhelper.getWritableDatabase();
+		//开启事务
+		sdb.beginTransaction();
+		sdb.execSQL("delete from Score");
+		for(Scoremodel cscore:WhuUtil.courseScore){
+			sdb.execSQL("insert into Score(id,name,credit,score) values(?,?,?,?)",
+					new String[]{cscore.id,cscore.name,String.valueOf(cscore.credit),String.valueOf(cscore.score)});
+			
+		}
+		sdb.setTransactionSuccessful();
+		sdb.endTransaction();
 	}
 	
-	
+	//从数据库获取成绩
+	public void queryScoreFromdb(){
+		SQLiteDatabase sdb=sdbhelper.getWritableDatabase();
+		Cursor cursor=sdb.rawQuery("select * from Score", null);
+		if(cursor.moveToFirst()){
+			do {
+				String id=cursor.getString(cursor.getColumnIndex("id"));
+				String name=cursor.getString(cursor.getColumnIndex("name"));
+				float credit=cursor.getFloat(cursor.getColumnIndex("credit"));
+				float score=cursor.getFloat(cursor.getColumnIndex("score"));
+				WhuUtil.courseScore.add(new Scoremodel(id,name,credit,score));
+			} while (cursor.moveToNext());
+		}
+		adapter.notifyDataSetChanged();
+	}
+	//从服务器获取数据
+	public void queryScoreFromSever(){
+		new DownloadScoreTask().execute();
+	}
+	//获取数据
+	public void queryScoreData(){
+		try {
+			queryScoreFromdb();
+			if(WhuUtil.courseScore.size()==0){
+				queryScoreFromSever();
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			queryScoreFromSever();
+		}
+		
+	}
 	class DownloadScoreTask extends AsyncTask<Void, Integer, Boolean>{
 		@Override
 		protected void onPreExecute() {
@@ -152,9 +196,11 @@ public class ScoreFragment extends Fragment {
 			}else{
 				Toast.makeText(getActivity(), "网络错误", Toast.LENGTH_LONG).show();
 			}
+			//把服务器数据写回数据库
 			saveScore2db();
 			closeProgressDlg();
 		}
+		
 	}
 
 }	

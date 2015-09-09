@@ -85,6 +85,8 @@ public class FuncActivity extends Activity implements OnClickListener{
 		default:
 			break;
 		}
+		//讲事务添加到返回栈
+		tr.addToBackStack(null);
 		tr.commit();
 	}
 	private void resetimg() {
@@ -93,5 +95,11 @@ public class FuncActivity extends Activity implements OnClickListener{
 		frdimg.setImageResource(R.drawable.tab_find_frd_normal);
 		addrimg.setImageResource(R.drawable.tab_address_normal);
 		settingimg.setImageResource(R.drawable.tab_settings_normal);
+	}
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		WhuUtil.courseScore.clear();
 	}
 }

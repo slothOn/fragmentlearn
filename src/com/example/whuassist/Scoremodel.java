@@ -6,6 +6,7 @@ public class Scoremodel {
 	public static int COURSE_ZHUANBI=1;
 	public static int COURSE_ZHUANXUAN=2;
 	public static int COURSE_GONGXUAN=3;
+	public String id;
 	public String name;
 	public int type;
 	public float credit=0;
@@ -14,7 +15,18 @@ public class Scoremodel {
 	//private String note;
 	//private String year;
 	//private String term;
-	public float score=0;	
+	public float score=0;
+	public Scoremodel() {
+		// TODO Auto-generated constructor stub
+	}
+	public Scoremodel(String id,String name,float credit,float score) {
+		// TODO Auto-generated constructor stub
+		this.id=id;
+		this.name=name;
+		this.credit=credit;
+		this.score=score;
+	}
+	
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub

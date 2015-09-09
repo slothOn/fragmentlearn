@@ -34,6 +34,7 @@ public class WhuUtil {
 			org.jsoup.nodes.Element e=tr.get(i);
 			Scoremodel course=new Scoremodel();
 			Elements td=e.getElementsByTag("td");
+			course.id=td.get(0).text();
 			course.name=td.get(1).text();
 			course.credit=Float.parseFloat(td.get(3).text());
 			if(!("".equals(td.get(9).text())))
