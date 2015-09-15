@@ -20,9 +20,9 @@ public class FuncActivity extends Activity implements OnClickListener{
 	 private ImageButton frdimg;
 	 private ImageButton addrimg;
 	 private ImageButton settingimg;
-	 private Fragment weixinfrg;
-	 private Fragment frdfrg;
-	 private Fragment addrfrg;
+	 private Fragment newsfrg;
+	 private Fragment scorefrg;
+	 private Fragment schedulefrg;
 	 private Fragment settingfrg;
 	 FragmentManager manager;
 	@Override
@@ -44,14 +44,14 @@ public class FuncActivity extends Activity implements OnClickListener{
 		addrimg=(ImageButton) findViewById(R.id.id_tabaddressimg);
 		settingimg=(ImageButton) findViewById(R.id.id_tabsettingsimg);
 		
-		weixinfrg=new NewsFragment();
-		frdfrg=new ScoreFragment();
-		addrfrg=new WeixinFragment();
-		settingfrg=new WeixinFragment();
+		newsfrg=new InfoFragment();
+		scorefrg=new ScoreFragment();
+		schedulefrg=new ScheduleFragment();
+		settingfrg=new SettingFragment();
 		
 		manager=getFragmentManager();
 		FragmentTransaction transaction=manager.beginTransaction();
-		transaction.replace(R.id.id_fraglayout, weixinfrg);
+		transaction.replace(R.id.id_fraglayout, newsfrg);
 		transaction.commit();
 	}
 	public void initevent(){
@@ -67,15 +67,15 @@ public class FuncActivity extends Activity implements OnClickListener{
 		FragmentTransaction tr=manager.beginTransaction();
 		switch (arg0.getId()) {
 		case R.id.id_tabweixin:
-			tr.replace(R.id.id_fraglayout, weixinfrg);
+			tr.replace(R.id.id_fraglayout, newsfrg);
 			weixinimg.setImageResource(R.drawable.tab_weixin_pressed);
 			break;
         case R.id.id_tabfrd:
-			tr.replace(R.id.id_fraglayout, frdfrg);
+			tr.replace(R.id.id_fraglayout, scorefrg);
 			frdimg.setImageResource(R.drawable.tab_find_frd_pressed);
 			break;
         case R.id.id_tabaddress:
-			tr.replace(R.id.id_fraglayout, addrfrg);
+			tr.replace(R.id.id_fraglayout, schedulefrg);
 			addrimg.setImageResource(R.drawable.tab_address_pressed);
 			break;
         case R.id.id_tabsettings:
@@ -85,8 +85,7 @@ public class FuncActivity extends Activity implements OnClickListener{
 		default:
 			break;
 		}
-		//讲事务添加到返回栈
-		tr.addToBackStack(null);
+		//tr.addToBackStack(null);
 		tr.commit();
 	}
 	private void resetimg() {
@@ -97,9 +96,9 @@ public class FuncActivity extends Activity implements OnClickListener{
 		settingimg.setImageResource(R.drawable.tab_settings_normal);
 	}
 	@Override
-	protected void onDestroy() {
+	protected void onStop() {
 		// TODO Auto-generated method stub
-		super.onDestroy();
+		super.onStop();
 		WhuUtil.courseScore.clear();
 	}
 }

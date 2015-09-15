@@ -21,10 +21,15 @@
         android:layout_weight="1"
         android:text="还没计算？点左边"/>
     </LinearLayout>
-    
-    <ListView 
-        android:id="@+id/score_list"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/id_swiperefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </ListView>
+    	<ListView 
+        android:id="@+id/score_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    	</ListView>    
+    </android.support.v4.widget.SwipeRefreshLayout>
+    
 </LinearLayout>

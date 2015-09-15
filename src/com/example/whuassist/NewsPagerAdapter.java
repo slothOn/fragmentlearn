@@ -7,7 +7,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 
 public class NewsPagerAdapter extends MyFragmentAdapter {
-    public static String titles[]=new String[]{"推荐","新闻","通知","招聘"};
+    public static String titles[]=new String[]{"新闻","通知","培养","科研"};
     public static List<Fragment> frgs=new ArrayList<Fragment>();
 	public NewsPagerAdapter(FragmentManager fm) {
 		super(fm);

@@ -15,6 +15,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +29,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ScoreFragment extends Fragment {
+public class ScoreFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 	private ScoreTableHelper sdbhelper;
 	
 	TextView GPAshow;
@@ -38,10 +40,9 @@ public class ScoreFragment extends Fragment {
 	
 	boolean isGPAComputed;
 	float creditAll=0;
-	//ArrayAdapter<String> dataList;
 	ArrayAdapter<Scoremodel> adapter;
 	TextView titletext;
-	
+	SwipeRefreshLayout swiperefresh;
 	@Override
     public void onAttach(Activity activity) {
 		// TODO Auto-generated method stub
@@ -51,28 +52,23 @@ public class ScoreFragment extends Fragment {
     	adapter=new ArrayAdapter<Scoremodel>(activity,
     			android.R.layout.simple_list_item_1,WhuUtil.courseScore);
     };
-    public void showProgressDlg(){
-    	if(progressdlg==null){
-    		progressdlg=new ProgressDialog(getActivity());
-    		progressdlg.setMessage("正在加载");
-    		progressdlg.setCanceledOnTouchOutside(false);
-    	}
-    	progressdlg.show();
-    }
-    public void closeProgressDlg(){
-    	if(progressdlg!=null){
-    		progressdlg.dismiss();
-    	}
-    }
+   
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		View v=inflater.inflate(R.layout.score_fragment, null);
+		
+		swiperefresh=(SwipeRefreshLayout) v.findViewById(R.id.id_swiperefresh);
+		swiperefresh.setOnRefreshListener(this);
+		swiperefresh.setColorSchemeResources(android.R.color.holo_blue_bright,
+				android.R.color.holo_green_light, android.R.color.holo_orange_light, 
+				android.R.color.holo_red_light);
+		
 		listview=(ListView)v.findViewById(R.id.score_list);
 		btn_GPA=(Button)v.findViewById(R.id.btn_compute);
 		GPAshow=(TextView)v.findViewById(R.id.show_score);
-		
+		swiperefresh.setOnRefreshListener( this);
         btn_GPA.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -167,7 +163,8 @@ public class ScoreFragment extends Fragment {
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
-			showProgressDlg();
+			//showProgressDlg();
+			swiperefresh.setRefreshing(true);
 		}
 		@Override
 		protected Boolean doInBackground(Void... params) {
@@ -175,6 +172,7 @@ public class ScoreFragment extends Fragment {
 			try {
 				String rtxt=WhuHttpUtil.getInstance().reqwebinfo(
 						"http://210.42.121.241/servlet/Svlt_QueryStuScore?year=0&term=&learnType=&scoreFlag=0", null);
+				WhuUtil.courseScore.clear();
 				WhuUtil.scoreParse(rtxt);
 				return true;
 			} catch (Exception e) {
@@ -198,9 +196,16 @@ public class ScoreFragment extends Fragment {
 			}
 			//把服务器数据写回数据库
 			saveScore2db();
-			closeProgressDlg();
+			//closeProgressDlg();
+			swiperefresh.setRefreshing(false);
 		}
 		
+	}
+	//刷新状态
+	@Override
+	public void onRefresh() {
+		// TODO Auto-generated method stub
+		queryScoreFromSever();
 	}
 
 }	

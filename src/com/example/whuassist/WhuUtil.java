@@ -18,6 +18,7 @@ import android.renderscript.Element;
 public class WhuUtil {
 	public static String name;
 	public static ArrayList<Scoremodel> courseScore=new ArrayList<Scoremodel>();
+	public static ArrayList<Schedulemodel> courseSchedule=new ArrayList<Schedulemodel>();
 	public static void saveToFile(Context c,String txt,String name) throws IOException{
 		OutputStream out=c.openFileOutput(name, Context.MODE_PRIVATE);
 		BufferedWriter bfw=new BufferedWriter(new OutputStreamWriter(out));
@@ -44,6 +45,11 @@ public class WhuUtil {
 	        courseScore.add(course);
 		}
 	}
+	
+	public static void scheduleParse(String html){
+		
+	}
+	
 	public static boolean isLogin(String html){
 		Document doc=Jsoup.parse(html);
 		org.jsoup.nodes.Element nameelement=doc.getElementById("nameLable");
