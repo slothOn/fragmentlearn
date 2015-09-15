@@ -12,13 +12,15 @@ import android.view.ViewGroup;
 public class InfoFragment extends Fragment {
 	ViewPager viewpager;
 	TabPageIndicator tabpageindicator;
-	NewsPagerAdapter adapter;
+	InfoPagerAdapter adapter;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		View v=inflater.inflate(R.layout.news_frag,container,false);
-		adapter=new NewsPagerAdapter(getFragmentManager());
+		if(adapter==null){
+			adapter=new InfoPagerAdapter(getFragmentManager());
+		}
 		viewpager=(ViewPager) v.findViewById(R.id.id_viewpager);
 		viewpager.setAdapter(adapter);
 		tabpageindicator=(TabPageIndicator) v.findViewById(R.id.id_pageindicator);

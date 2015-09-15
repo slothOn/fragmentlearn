@@ -25,7 +25,7 @@ public class TabFragment extends Fragment
 	{
 		View view = inflater.inflate(R.layout.frag, container, false);
 		TextView tv = (TextView) view.findViewById(R.id.id_tv);
-		tv.setText(NewsPagerAdapter.titles[pos]);
+		tv.setText(InfoPagerAdapter.titles[pos]);
 		return view;
 	}
 }

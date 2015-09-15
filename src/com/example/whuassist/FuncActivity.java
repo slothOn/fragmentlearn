@@ -20,7 +20,7 @@ public class FuncActivity extends Activity implements OnClickListener{
 	 private ImageButton frdimg;
 	 private ImageButton addrimg;
 	 private ImageButton settingimg;
-	 private Fragment newsfrg;
+	 private Fragment infofrg;
 	 private Fragment scorefrg;
 	 private Fragment schedulefrg;
 	 private Fragment settingfrg;
@@ -44,14 +44,14 @@ public class FuncActivity extends Activity implements OnClickListener{
 		addrimg=(ImageButton) findViewById(R.id.id_tabaddressimg);
 		settingimg=(ImageButton) findViewById(R.id.id_tabsettingsimg);
 		
-		newsfrg=new InfoFragment();
+		infofrg=new InfoFragment();
 		scorefrg=new ScoreFragment();
 		schedulefrg=new ScheduleFragment();
 		settingfrg=new SettingFragment();
 		
 		manager=getFragmentManager();
 		FragmentTransaction transaction=manager.beginTransaction();
-		transaction.replace(R.id.id_fraglayout, newsfrg);
+		transaction.replace(R.id.id_fraglayout, infofrg);
 		transaction.commit();
 	}
 	public void initevent(){
@@ -67,7 +67,7 @@ public class FuncActivity extends Activity implements OnClickListener{
 		FragmentTransaction tr=manager.beginTransaction();
 		switch (arg0.getId()) {
 		case R.id.id_tabweixin:
-			tr.replace(R.id.id_fraglayout, newsfrg);
+			tr.replace(R.id.id_fraglayout, infofrg);
 			weixinimg.setImageResource(R.drawable.tab_weixin_pressed);
 			break;
         case R.id.id_tabfrd:
