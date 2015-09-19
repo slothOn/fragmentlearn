@@ -17,6 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
@@ -179,4 +180,22 @@ public class WhuUtil {
 		
 	}
 	
+	public static String parseNewsDetail(String html){
+		Document doc=Jsoup.parse(html);
+		org.jsoup.nodes.Element head=doc.getElementsByTag("head").get(0);
+		org.jsoup.nodes.Element ctnt=doc.getElementsByTag("table").get(9);
+		Elements as=ctnt.getElementsByTag("a");
+		Elements imgs=ctnt.getElementsByTag("img");
+		for(org.jsoup.nodes.Element img:imgs){
+			String src=img.attr("src");
+			img.attr("src", "http://sres.whu.edu.cn/"+src);
+		}
+		for(org.jsoup.nodes.Element a:as){
+			String href=a.attr("href");
+			a.attr("href", "http://sres.whu.edu.cn/"+href);
+		}
+		String ctntstr=ctnt.toString();
+		ctntstr="<html>"+head.toString()+"<body>"+ctntstr+"</body>"+"</html>";
+		return ctntstr;
+	}
 }

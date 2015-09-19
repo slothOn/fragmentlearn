@@ -23,6 +23,8 @@
             </intent-filter>
         </activity>
         <activity 
+            android:name=".info.InfoDetailActivity"></activity>
+        <activity 
             android:name=".FuncActivity"></activity>
         <service 
             android:name="com.example.whuassist.service.AutoUpdateService"></service>

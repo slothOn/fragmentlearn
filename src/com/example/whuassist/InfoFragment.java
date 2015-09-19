@@ -33,7 +33,7 @@ public class InfoFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		View v=inflater.inflate(R.layout.news_frag, container, false);
+		View v=inflater.inflate(R.layout.layout_info, container, false);
 		
 		ViewPager viewpager=(ViewPager) v.findViewById(R.id.id_viewpager);
 		TabPageIndicator tabpageindicator=(TabPageIndicator) v.findViewById(R.id.id_pageindicator);

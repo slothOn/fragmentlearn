@@ -10,6 +10,7 @@ import com.example.whuassist.info.NewsFragment.DownloadNewsTask;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -73,7 +74,10 @@ public class NotfcFragment extends Fragment implements OnRefreshListener
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
-				Toast.makeText(getActivity(), WhuUtil.notfctitle.get(position).txturl, Toast.LENGTH_LONG).show();
+				//Toast.makeText(getActivity(), WhuUtil.notfctitle.get(position).txturl, Toast.LENGTH_LONG).show();
+				Intent i=new Intent(getActivity(), InfoDetailActivity.class);
+				i.putExtra("DetailUrl", WhuUtil.notfctitle.get(position).txturl);
+				startActivity(i);
 			}
 		});
     	
@@ -157,5 +161,16 @@ public class NotfcFragment extends Fragment implements OnRefreshListener
 	public void onRefresh() {
 		// TODO Auto-generated method stub
 		updateNotfcFromServer();
+	}
+	
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		queryDataFromdb();
+    	if(WhuUtil.notfctitle.size()==0){
+    		updateNotfcFromServer();
+    	}
+    	madapter.notifyDataSetChanged();
 	}
 }

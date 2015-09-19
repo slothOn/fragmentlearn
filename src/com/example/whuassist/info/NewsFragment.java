@@ -30,6 +30,7 @@ import com.example.whuassist.db.ScoreTableHelper;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -138,7 +139,10 @@ public class NewsFragment extends Fragment implements OnRefreshListener
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
-				Toast.makeText(getActivity(), WhuUtil.newstitle.get(position).txturl, Toast.LENGTH_LONG).show();
+				//Toast.makeText(getActivity(), WhuUtil.newstitle.get(position).txturl, Toast.LENGTH_LONG).show();
+				Intent i=new Intent(getActivity(), InfoDetailActivity.class);
+				i.putExtra("DetailUrl", WhuUtil.newstitle.get(position).txturl);
+				startActivity(i);
 			}
 		});
     	
@@ -159,6 +163,7 @@ public class NewsFragment extends Fragment implements OnRefreshListener
 	}
 	
 	public void queryDataFromdb(){
+		WhuUtil.newstitle.clear();
 		SQLiteDatabase sqd=nth.getWritableDatabase();
 		Cursor cursor=sqd.rawQuery("select * from News", null);
 		if(cursor.moveToFirst()){
@@ -177,6 +182,11 @@ public class NewsFragment extends Fragment implements OnRefreshListener
 	public void onResume() {
     	// TODO Auto-generated method stub
     	super.onResume();
+    	queryDataFromdb();
+    	if(WhuUtil.newstitle.size()==0){
+    		updateNewsFromServer();
+    	}
+    	nadapter.notifyDataSetChanged();
     	autogallery();
     }
 		
