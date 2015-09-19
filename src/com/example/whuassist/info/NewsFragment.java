@@ -265,7 +265,7 @@ public class NewsFragment extends Fragment implements OnRefreshListener
 				gadapter.bmps=bmps;
 				gadapter.notifyDataSetChanged();
 				nadapter.notifyDataSetChanged();
-				saveScore2db();
+				saveNews2db();
 			}else{
 				Toast.makeText(getActivity(), "ÍøÂç´íÎó", Toast.LENGTH_LONG).show();
 			}
@@ -275,38 +275,12 @@ public class NewsFragment extends Fragment implements OnRefreshListener
 	}
 	
 	public boolean requestIndexpage(){
-		
-		HttpURLConnection conn=null;
-		URL url;
-		try {
-			url = new URL("http://sres.whu.edu.cn/");
-			conn=(HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setConnectTimeout(8000);
-			conn.setReadTimeout(8000);
-			InputStream in=conn.getInputStream();
-			BufferedReader reader=new BufferedReader(new InputStreamReader(in,"gbk"));
-			StringBuilder sb=new StringBuilder();
-			String line;
-			while((line=reader.readLine())!=null){
-				sb.append(line);
-			}
-			String[] picurl=WhuUtil.parsePicUrl(sb.toString());
-			for(int i=0;i<picurl.length;i++){
-				picurl[i]="http://sres.whu.edu.cn/"+picurl[i];
-			}
-			savePicToFile(picurl);
-			
-			return true;
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		boolean t=WhuUtil.requestIndexpage();
+		if(t){
+			savePicToFile(WhuUtil.picurl);
+			return t;
+		}else{
 			return false;
-		}finally{
-			if(conn!=null){
-				conn.disconnect();
-			}
 		}
 	}
 	
@@ -362,7 +336,7 @@ public class NewsFragment extends Fragment implements OnRefreshListener
 		}		
 	}
 	
-	public void saveScore2db(){
+	public void saveNews2db(){
 		SQLiteDatabase sqb=nth.getWritableDatabase();		
 		sqb.beginTransaction();
 		sqb.execSQL("delete from News");

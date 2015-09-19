@@ -30,6 +30,7 @@ import android.util.Log;
 
 public class WhuUtil {
 	public static String name;
+	public static String[] picurl;
 	public static ArrayList<Scoremodel> courseScore=new ArrayList<Scoremodel>();
 	public static ArrayList<Schedulemodel> courseSchedule=new ArrayList<Schedulemodel>();
 	public static ArrayList<TitleModel> newstitle=new ArrayList<TitleModel>();
@@ -80,7 +81,41 @@ public class WhuUtil {
 		}
 	}
 	
-	public static String[] parsePicUrl(String html){
+	public static boolean requestIndexpage(){
+		HttpURLConnection conn=null;
+		URL url;
+		try {
+			url = new URL("http://sres.whu.edu.cn/");
+			conn=(HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setConnectTimeout(8000);
+			conn.setReadTimeout(8000);
+			InputStream in=conn.getInputStream();
+			BufferedReader reader=new BufferedReader(new InputStreamReader(in,"gbk"));
+			StringBuilder sb=new StringBuilder();
+			String line;
+			while((line=reader.readLine())!=null){
+				sb.append(line);
+			}
+			WhuUtil.parseUrl(sb.toString());
+			for(int i=0;i<picurl.length;i++){
+				picurl[i]="http://sres.whu.edu.cn/"+picurl[i];
+			}
+			
+			return true;
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}finally{
+			if(conn!=null){
+				conn.disconnect();
+			}
+		}
+	}
+	
+	public static void parseUrl(String html){
 
 		Document doc=Jsoup.parse(html);
 		Elements jss=doc.getElementsByTag("script");
@@ -93,9 +128,9 @@ public class WhuUtil {
 	    	as.add(matcher.group());
 	    }
 		Log.d("picurl", ""+as.size());
-		String[] pics=new String[as.size()];
+		picurl=new String[as.size()];
 		for(int i=0;i<as.size();i++){
-			pics[i]=as.get(i);
+			picurl[i]=as.get(i);
 		}
 		//½âÎönews
 		newstitle.clear();
@@ -128,12 +163,12 @@ public class WhuUtil {
 			String h="http://sres.whu.edu.cn/"+ecul.getElementsByTag("td").get(1).getElementsByTag("a").get(0).attributes().get("href");
 			String d=ecul.getElementsByTag("td").get(2).text();
 			TitleModel ntm=new TitleModel(t,d,h);
-			notfctitle.add(ntm);
+			cultitle.add(ntm);
 		}
 		//½âÎöscience
 		scititle.clear();
 		org.jsoup.nodes.Element sciele=doc.getElementsByTag("table").get(62).getElementsByTag("tbody").get(0);
-		Elements scitable=newsele.getElementsByTag("table");
+		Elements scitable=sciele.getElementsByTag("table");
 		for(org.jsoup.nodes.Element esci:scitable){
 			String t=esci.getElementsByTag("td").get(1).getElementsByTag("a").get(0).attributes().get("title");
 			String h="http://sres.whu.edu.cn/"+esci.getElementsByTag("td").get(1).getElementsByTag("a").get(0).attributes().get("href");
@@ -141,43 +176,7 @@ public class WhuUtil {
 			TitleModel ntm=new TitleModel(t,d,h);
 			scititle.add(ntm);
 		}
-		return pics;
 		
 	}
-	
-	public static boolean requestIndexpage(){
-		HttpURLConnection conn=null;
-		URL url;
-		try {
-			url = new URL("http://sres.whu.edu.cn/");
-			conn=(HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setConnectTimeout(8000);
-			conn.setReadTimeout(8000);
-			InputStream in=conn.getInputStream();
-			BufferedReader reader=new BufferedReader(new InputStreamReader(in,"gbk"));
-			StringBuilder sb=new StringBuilder();
-			String line;
-			while((line=reader.readLine())!=null){
-				sb.append(line);
-			}
-			String[] picurl=WhuUtil.parsePicUrl(sb.toString());
-			for(int i=0;i<picurl.length;i++){
-				picurl[i]="http://sres.whu.edu.cn/"+picurl[i];
-			}
-			
-			return true;
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}finally{
-			if(conn!=null){
-				conn.disconnect();
-			}
-		}
-	}
-	
 	
 }

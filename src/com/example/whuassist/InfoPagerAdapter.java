@@ -3,7 +3,10 @@ package com.example.whuassist;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.whuassist.info.CulFragment;
 import com.example.whuassist.info.NewsFragment;
+import com.example.whuassist.info.NotfcFragment;
+import com.example.whuassist.info.SciFragment;
 import com.example.whuassist.info.TabFragment;
 
 import android.app.Fragment;
@@ -18,9 +21,9 @@ public class InfoPagerAdapter extends MyFragmentAdapter {
 		if(frgs==null){
 			frgs=new ArrayList<Fragment>();
 			frgs.add(new NewsFragment());
-			frgs.add(new TabFragment(1));
-			frgs.add(new TabFragment(2));
-			frgs.add(new TabFragment(3));
+			frgs.add(new NotfcFragment());
+			frgs.add(new CulFragment());
+			frgs.add(new SciFragment());
 		}
 		
 	}

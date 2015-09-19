@@ -29,7 +29,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 
-public class NotfcFragment extends Fragment implements OnRefreshListener
+public class SciFragment extends Fragment implements OnRefreshListener
 {
 	SwipeRefreshLayout swipe;
 	ListView mlist;
@@ -41,7 +41,7 @@ public class NotfcFragment extends Fragment implements OnRefreshListener
 		// TODO Auto-generated method stub
 		super.onAttach(activity);
 		madapter=new ArrayAdapter<TitleModel>(getActivity(), 
-				android.R.layout.simple_list_item_1,WhuUtil.notfctitle);
+				android.R.layout.simple_list_item_1,WhuUtil.scititle);
 		
 		nth=new InfoTableHelper(getActivity(), "ZihuanNews", null, 1);
 	}
@@ -61,11 +61,11 @@ public class NotfcFragment extends Fragment implements OnRefreshListener
 		
 		mlist.setAdapter(madapter);
     	
-    	if(WhuUtil.notfctitle.size()==0){
+    	if(WhuUtil.scititle.size()==0){
     		queryDataFromdb();
     	}
-    	if(WhuUtil.notfctitle.size()==0){
-    		updateNotfcFromServer();
+    	if(WhuUtil.scititle.size()==0){
+    		updateSciFromServer();
     	}
     	
     	mlist.setOnItemClickListener(new OnItemClickListener() {
@@ -74,7 +74,7 @@ public class NotfcFragment extends Fragment implements OnRefreshListener
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
-				Toast.makeText(getActivity(), WhuUtil.notfctitle.get(position).txturl, Toast.LENGTH_LONG).show();
+				Toast.makeText(getActivity(), WhuUtil.scititle.get(position).txturl, Toast.LENGTH_LONG).show();
 			}
 		});
     	
@@ -84,24 +84,24 @@ public class NotfcFragment extends Fragment implements OnRefreshListener
 	
 	public void queryDataFromdb(){
 		SQLiteDatabase sqd=nth.getWritableDatabase();
-		Cursor cursor=sqd.rawQuery("select * from Notfc", null);
+		Cursor cursor=sqd.rawQuery("select * from Sci", null);
 		if(cursor.moveToFirst()){
 			do{
 				String title=cursor.getString(cursor.getColumnIndex("title"));
 				String date=cursor.getString(cursor.getColumnIndex("date"));
 				String txturl=cursor.getString(cursor.getColumnIndex("txturl"));
-				WhuUtil.notfctitle.add(new TitleModel(title, date, txturl));
+				WhuUtil.scititle.add(new TitleModel(title, date, txturl));
 				
 			}while(cursor.moveToNext());
 		}
 		madapter.notifyDataSetChanged();
 	}
 	
-	public void updateNotfcFromServer(){
-		new DownloadNotfcTask().execute();
+	public void updateSciFromServer(){
+		new DownloadSciTask().execute();
 	}
 	
-	class DownloadNotfcTask extends AsyncTask<Void, Integer, Boolean>{
+	class DownloadSciTask extends AsyncTask<Void, Integer, Boolean>{
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
@@ -112,10 +112,10 @@ public class NotfcFragment extends Fragment implements OnRefreshListener
 		protected Boolean doInBackground(Void... params) {
 			// TODO Auto-generated method stub
 			
-			if(WhuUtil.notfctitle.size()==0){
+			if(WhuUtil.scititle.size()==0){
 				WhuUtil.requestIndexpage();
 			}
-			if(WhuUtil.notfctitle.size()!=0){
+			if(WhuUtil.scititle.size()!=0){
 				return true;
 			}else{
 				return false;
@@ -133,7 +133,7 @@ public class NotfcFragment extends Fragment implements OnRefreshListener
 			super.onPostExecute(result);
 			if(result){
 				madapter.notifyDataSetChanged();
-				saveNotfc2db();
+				saveSci2db();
 			}else{
 				Toast.makeText(getActivity(), "ÍøÂç´íÎó", Toast.LENGTH_LONG).show();
 			}
@@ -142,13 +142,13 @@ public class NotfcFragment extends Fragment implements OnRefreshListener
 		
 	}
 	
-	public void saveNotfc2db(){
+	public void saveSci2db(){
 		SQLiteDatabase sqb=nth.getWritableDatabase();		
 		sqb.beginTransaction();
-		sqb.execSQL("delete from Notfc");
-		for(TitleModel notfctitle:WhuUtil.notfctitle){
-			sqb.execSQL("insert into Notfc(title,date,txturl) values(?,?,?)",
-					new String[]{notfctitle.title,notfctitle.date,notfctitle.txturl});
+		sqb.execSQL("delete from Sci");
+		for(TitleModel scititle:WhuUtil.scititle){
+			sqb.execSQL("insert into Sci(title,date,txturl) values(?,?,?)",
+					new String[]{scititle.title,scititle.date,scititle.txturl});
 		}
 		sqb.setTransactionSuccessful();
 		sqb.endTransaction();
@@ -157,6 +157,6 @@ public class NotfcFragment extends Fragment implements OnRefreshListener
 	@Override
 	public void onRefresh() {
 		// TODO Auto-generated method stub
-		updateNotfcFromServer();
+		updateSciFromServer();
 	}
 }
