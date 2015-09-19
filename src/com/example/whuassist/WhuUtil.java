@@ -1,24 +1,42 @@
 package com.example.whuassist;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import com.example.whuassist.info.TitleModel;
+import com.example.whuassist.schedule.Schedulemodel;
+import com.example.whuassist.score.Scoremodel;
+
 import android.content.Context;
 import android.renderscript.Element;
+import android.util.Log;
 
 public class WhuUtil {
 	public static String name;
 	public static ArrayList<Scoremodel> courseScore=new ArrayList<Scoremodel>();
 	public static ArrayList<Schedulemodel> courseSchedule=new ArrayList<Schedulemodel>();
+	public static ArrayList<TitleModel> newstitle=new ArrayList<TitleModel>();
+	public static ArrayList<TitleModel> notfctitle=new ArrayList<TitleModel>();
+	public static ArrayList<TitleModel> cultitle=new ArrayList<TitleModel>();
+	public static ArrayList<TitleModel> scititle=new ArrayList<TitleModel>();
+	
 	public static void saveToFile(Context c,String txt,String name) throws IOException{
 		OutputStream out=c.openFileOutput(name, Context.MODE_PRIVATE);
 		BufferedWriter bfw=new BufferedWriter(new OutputStreamWriter(out));
@@ -61,4 +79,105 @@ public class WhuUtil {
 			return true;	
 		}
 	}
+	
+	public static String[] parsePicUrl(String html){
+
+		Document doc=Jsoup.parse(html);
+		Elements jss=doc.getElementsByTag("script");
+		//解析图片
+		org.jsoup.nodes.Element js=jss.get(5);
+		Pattern mpatrn=Pattern.compile("uploadfile/ImgFile/\\d{4}-\\d{2}/Img\\d+.jpg");
+		Matcher matcher=mpatrn.matcher(js.toString());
+	    ArrayList<String> as=new ArrayList<String>();
+		while(matcher.find()){
+	    	as.add(matcher.group());
+	    }
+		Log.d("picurl", ""+as.size());
+		String[] pics=new String[as.size()];
+		for(int i=0;i<as.size();i++){
+			pics[i]=as.get(i);
+		}
+		//解析news
+		newstitle.clear();
+		org.jsoup.nodes.Element newsele=doc.getElementsByTag("table").get(18).getElementsByTag("tbody").get(0);
+		Elements newstable=newsele.getElementsByTag("table");
+		for(org.jsoup.nodes.Element enews:newstable){
+			String t=enews.getElementsByTag("td").get(1).getElementsByTag("a").get(0).attributes().get("title");
+			String h="http://sres.whu.edu.cn/"+enews.getElementsByTag("td").get(1).getElementsByTag("a").get(0).attributes().get("href");
+			String d=enews.getElementsByTag("td").get(2).text();
+			TitleModel ntm=new TitleModel(t,d,h);
+			newstitle.add(ntm);
+		}
+		//解析notification
+		notfctitle.clear();
+		org.jsoup.nodes.Element notfcele=doc.getElementsByTag("table").get(38).getElementsByTag("tbody").get(0);
+		Elements notfctable=notfcele.getElementsByTag("table");
+		for(org.jsoup.nodes.Element enotfc:notfctable){
+			String t=enotfc.getElementsByTag("td").get(1).getElementsByTag("a").get(0).attributes().get("title");
+			String h="http://sres.whu.edu.cn/"+enotfc.getElementsByTag("td").get(1).getElementsByTag("a").get(0).attributes().get("href");
+			String d=enotfc.getElementsByTag("td").get(2).text();
+			TitleModel ntm=new TitleModel(t,d,h);
+			notfctitle.add(ntm);
+		}
+		//解析cultivation
+		cultitle.clear();
+		org.jsoup.nodes.Element culele=doc.getElementsByTag("table").get(8).getElementsByTag("tbody").get(0);
+		Elements cultable=culele.getElementsByTag("table");
+		for(org.jsoup.nodes.Element ecul:cultable){
+			String t=ecul.getElementsByTag("td").get(1).getElementsByTag("a").get(0).attributes().get("title");
+			String h="http://sres.whu.edu.cn/"+ecul.getElementsByTag("td").get(1).getElementsByTag("a").get(0).attributes().get("href");
+			String d=ecul.getElementsByTag("td").get(2).text();
+			TitleModel ntm=new TitleModel(t,d,h);
+			notfctitle.add(ntm);
+		}
+		//解析science
+		scititle.clear();
+		org.jsoup.nodes.Element sciele=doc.getElementsByTag("table").get(62).getElementsByTag("tbody").get(0);
+		Elements scitable=newsele.getElementsByTag("table");
+		for(org.jsoup.nodes.Element esci:scitable){
+			String t=esci.getElementsByTag("td").get(1).getElementsByTag("a").get(0).attributes().get("title");
+			String h="http://sres.whu.edu.cn/"+esci.getElementsByTag("td").get(1).getElementsByTag("a").get(0).attributes().get("href");
+			String d=esci.getElementsByTag("td").get(2).text();
+			TitleModel ntm=new TitleModel(t,d,h);
+			scititle.add(ntm);
+		}
+		return pics;
+		
+	}
+	
+	public static boolean requestIndexpage(){
+		HttpURLConnection conn=null;
+		URL url;
+		try {
+			url = new URL("http://sres.whu.edu.cn/");
+			conn=(HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setConnectTimeout(8000);
+			conn.setReadTimeout(8000);
+			InputStream in=conn.getInputStream();
+			BufferedReader reader=new BufferedReader(new InputStreamReader(in,"gbk"));
+			StringBuilder sb=new StringBuilder();
+			String line;
+			while((line=reader.readLine())!=null){
+				sb.append(line);
+			}
+			String[] picurl=WhuUtil.parsePicUrl(sb.toString());
+			for(int i=0;i<picurl.length;i++){
+				picurl[i]="http://sres.whu.edu.cn/"+picurl[i];
+			}
+			
+			return true;
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}finally{
+			if(conn!=null){
+				conn.disconnect();
+			}
+		}
+	}
+	
+	
 }

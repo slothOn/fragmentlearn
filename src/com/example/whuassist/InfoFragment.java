@@ -18,9 +18,7 @@ public class InfoFragment extends Fragment {
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		View v=inflater.inflate(R.layout.news_frag,container,false);
-		if(adapter==null){
-			adapter=new InfoPagerAdapter(getFragmentManager());
-		}
+		adapter=new InfoPagerAdapter(getFragmentManager());
 		viewpager=(ViewPager) v.findViewById(R.id.id_viewpager);
 		viewpager.setAdapter(adapter);
 		tabpageindicator=(TabPageIndicator) v.findViewById(R.id.id_pageindicator);

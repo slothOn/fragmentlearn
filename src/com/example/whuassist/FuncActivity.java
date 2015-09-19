@@ -1,5 +1,8 @@
 package com.example.whuassist;
 
+import com.example.whuassist.schedule.ScheduleFragment;
+import com.example.whuassist.score.ScoreFragment;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -100,5 +103,6 @@ public class FuncActivity extends Activity implements OnClickListener{
 		// TODO Auto-generated method stub
 		super.onStop();
 		WhuUtil.courseScore.clear();
+		WhuUtil.newstitle.clear();
 	}
 }

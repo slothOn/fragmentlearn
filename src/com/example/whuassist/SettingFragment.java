@@ -1,5 +1,8 @@
 package com.example.whuassist;
 
+import com.example.whuassist.R;
+import com.example.whuassist.R.layout;
+
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
