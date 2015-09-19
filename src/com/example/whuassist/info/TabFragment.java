@@ -1,7 +1,6 @@
 package com.example.whuassist.info;
 
 
-import com.example.whuassist.InfoPagerAdapter;
 import com.example.whuassist.R;
 import com.example.whuassist.R.id;
 import com.example.whuassist.R.layout;
@@ -30,7 +29,7 @@ public class TabFragment extends Fragment
 	{
 		View view = inflater.inflate(R.layout.frag, null);
 		TextView tv = (TextView) view.findViewById(R.id.id_tv);
-		tv.setText(InfoPagerAdapter.titles[pos]);
+		//tv.setText(InfoPagerAdapter.titles[pos]);
 		return view;
 	}
 }

@@ -1,7 +1,6 @@
 package com.example.whuassist.info;
 
 
-import com.example.whuassist.InfoPagerAdapter;
 import com.example.whuassist.R;
 import com.example.whuassist.WhuUtil;
 import com.example.whuassist.R.id;
