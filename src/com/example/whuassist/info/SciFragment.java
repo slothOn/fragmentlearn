@@ -86,6 +86,7 @@ public class SciFragment extends Fragment implements OnRefreshListener
 	}
 	
 	public void queryDataFromdb(){
+		WhuUtil.scititle.clear();
 		SQLiteDatabase sqd=nth.getWritableDatabase();
 		Cursor cursor=sqd.rawQuery("select * from Sci", null);
 		if(cursor.moveToFirst()){
@@ -146,6 +147,7 @@ public class SciFragment extends Fragment implements OnRefreshListener
 	}
 	
 	public void saveSci2db(){
+		
 		SQLiteDatabase sqb=nth.getWritableDatabase();		
 		sqb.beginTransaction();
 		sqb.execSQL("delete from Sci");

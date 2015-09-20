@@ -67,7 +67,25 @@ public class WhuUtil {
 	}
 	
 	public static void scheduleParse(String html){
-		
+		Document doc=Jsoup.parse(html);
+		org.jsoup.nodes.Element lestable=doc.select("table").first();
+		Elements lessons=lestable.getElementsByTag("tr");
+		for(int i=1;i<lessons.size();i++){
+			Elements lestd=lessons.get(i).getElementsByTag("td");
+			String id=lestd.get(0).text();
+			String name=lestd.get(1).text();
+			/*课表展示功能暂时可不用
+			String stype=lestd.get(2).text();
+			String school=lestd.get(4).text();
+			String teacher=lestd.get(5).text();
+			String major=lestd.get(6).text();
+			float credit=Float.valueOf(lestd.get(7).text());
+			int totaltime=Integer.valueOf(lestd.get(8).text());
+			*/
+			String time=lestd.get(9).select("div").first().text();
+			Schedulemodel sles=new Schedulemodel(id, name, time);
+			courseSchedule.add(sles);
+		}
 	}
 	
 	public static boolean isLogin(String html){
@@ -198,4 +216,6 @@ public class WhuUtil {
 		ctntstr="<html>"+head.toString()+"<body>"+ctntstr+"</body>"+"</html>";
 		return ctntstr;
 	}
+	
+	
 }

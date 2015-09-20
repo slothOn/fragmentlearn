@@ -86,6 +86,7 @@ public class CulFragment extends Fragment implements OnRefreshListener
 	}
 	
 	public void queryDataFromdb(){
+		WhuUtil.cultitle.clear();
 		SQLiteDatabase sqd=nth.getWritableDatabase();
 		Cursor cursor=sqd.rawQuery("select * from Cul", null);
 		if(cursor.moveToFirst()){
@@ -146,6 +147,7 @@ public class CulFragment extends Fragment implements OnRefreshListener
 	}
 	
 	public void saveCul2db(){
+		
 		SQLiteDatabase sqb=nth.getWritableDatabase();		
 		sqb.beginTransaction();
 		sqb.execSQL("delete from Cul");

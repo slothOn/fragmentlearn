@@ -12,29 +12,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class ScheduleFragment extends Fragment {
 	
-	ProgressDialog pdlg;
-    public void showProgressDlg(){
-    	if(pdlg==null){
-    		pdlg=new ProgressDialog(getActivity());
-    		pdlg.setMessage("ÕýÔÚ¼ÓÔØ");
-    		pdlg.setCanceledOnTouchOutside(false);
-    	}
-    	pdlg.show();
-    }
-    public void closeProgressDlg(){
-    	if(pdlg!=null){
-    		pdlg.dismiss();
-    	}
-    }
+	ProgressBar mprogress;
+    
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		View v=inflater.inflate(R.layout.tab1, container, false);
+		View v=inflater.inflate(R.layout.schedule_fragment, container, false);
+		mprogress.setVisibility(View.GONE);
 		return v;
 	}
 	
@@ -42,14 +32,14 @@ public class ScheduleFragment extends Fragment {
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
-			showProgressDlg();
+			mprogress.setVisibility(View.VISIBLE);
 		}
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			// TODO Auto-generated method stub
 			try {
 				String rtxt=WhuHttpUtil.getInstance().reqwebinfo(
-						"http://210.42.121.241/servlet/Svlt_QueryStuLsn?action=queryStuLsn", null);
+						"http://210.42.121.241//servlet/Svlt_QueryStuLsn?action=normalLsn", null);
 				WhuUtil.courseSchedule.clear();
 				WhuUtil.scheduleParse(rtxt);
 				return true;

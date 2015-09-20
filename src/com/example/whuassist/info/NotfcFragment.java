@@ -86,6 +86,7 @@ public class NotfcFragment extends Fragment implements OnRefreshListener
 	}
 	
 	public void queryDataFromdb(){
+		WhuUtil.notfctitle.clear();
 		SQLiteDatabase sqd=nth.getWritableDatabase();
 		Cursor cursor=sqd.rawQuery("select * from Notfc", null);
 		if(cursor.moveToFirst()){
