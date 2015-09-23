@@ -8,7 +8,7 @@ import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.View;
 
-public abstract class MyFragmentAdapter extends PagerAdapter {
+public abstract class MyPagerAdapter extends PagerAdapter {
 	private static final String TAG = "FragmentPagerAdapter";
     private static final boolean DEBUG = false;
 
@@ -16,7 +16,7 @@ public abstract class MyFragmentAdapter extends PagerAdapter {
     private FragmentTransaction mCurTransaction = null;
     private Fragment mCurrentPrimaryItem = null;
 
-    public MyFragmentAdapter(FragmentManager fm) {
+    public MyPagerAdapter(FragmentManager fm) {
         mFragmentManager = fm;
     }
 

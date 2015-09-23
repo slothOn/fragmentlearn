@@ -45,7 +45,7 @@ public class InfoFragment extends Fragment {
 		return v;
 	}
 	
-	class InfoPagerAdapter extends MyFragmentAdapter {
+	class InfoPagerAdapter extends MyPagerAdapter {
 	    
 	    
 		public InfoPagerAdapter(FragmentManager fm) {
