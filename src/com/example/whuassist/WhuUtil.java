@@ -31,6 +31,7 @@ import android.util.Log;
 
 public class WhuUtil {
 	public static String name;
+	public static int weeknum=1;
 	public static String[] picurl;
 	public static ArrayList<Scoremodel> courseScore=new ArrayList<Scoremodel>();
 	public static ArrayList<Schedulemodel> courseSchedule=new ArrayList<Schedulemodel>();
@@ -65,7 +66,9 @@ public class WhuUtil {
 	        courseScore.add(course);
 		}
 	}
-	
+	/*
+	 * 解析课表
+	 */
 	public static void scheduleParse(String html){
 		Document doc=Jsoup.parse(html);
 		org.jsoup.nodes.Element lestable=doc.select("table").first();
@@ -82,20 +85,62 @@ public class WhuUtil {
 			float credit=Float.valueOf(lestd.get(7).text());
 			int totaltime=Integer.valueOf(lestd.get(8).text());
 			*/
-			String time=lestd.get(9).select("div").first().text();
-			Schedulemodel sles=new Schedulemodel(id, name, time);
-			courseSchedule.add(sles);
+			String timetxt=lestd.get(9).select("div").first().text();
+			//System.out.println(timetxt);
+			if("".equals(timetxt)){
+				continue;
+			}else{
+				courseSchedule.add(parse2Schedulemodel(id, name, timetxt));
+			}
+			
+			
 		}
+	}
+	/*
+	 * 专门解析课程信息
+	 */
+	public static Schedulemodel parse2Schedulemodel(String id ,String name, String timetxt){
+		String[] timestr=timetxt.split(" ");
+		ArrayList<String> weekday=new ArrayList<String>();
+        ArrayList<Integer> weektimestart=new ArrayList<Integer>();
+        ArrayList<Integer> weektimeend=new ArrayList<Integer>();
+        ArrayList<Integer> daytimestart=new ArrayList<Integer>();
+        ArrayList<Integer> daytimeend=new ArrayList<Integer>();
+        ArrayList<String> place=new ArrayList<String>();
+        
+		for(int j=0;j<timestr.length;j=j+2){
+			//处理周数
+			 String sw[]=timestr[j].split(":");
+			 weekday.add(sw[0]);
+			 String[] swk=sw[1].split(",");
+			 String[] swkse=swk[0].split("-");
+			 int wstart=Integer.valueOf(swkse[0]);
+			 int wend=Integer.valueOf(swkse[1].substring(0, swkse[1].length()-1));
+			 weektimestart.add(wstart);weektimeend.add(wend);
+			 //处理节数和地点
+			 String sd[]=timestr[j+1].split(",");
+			 String sdy[]=sd[0].split("-");
+			 int dstart=Integer.valueOf(sdy[0]);
+			 int dend=Integer.valueOf(sdy[1].substring(0,sdy[1].length()-1));
+			 String splace=sd[1]+","+sd[2];
+			 place.add(splace);
+			 daytimestart.add(dstart);
+			 daytimeend.add(dend);
+		}
+		return new Schedulemodel(id, name, weektimestart,weektimeend,weekday,daytimestart,daytimeend,place, timetxt);
 	}
 	
 	public static boolean isLogin(String html){
 		Document doc=Jsoup.parse(html);
 		org.jsoup.nodes.Element nameelement=doc.getElementById("nameLable");
+		org.jsoup.nodes.Element weeknumele=doc.getElementById("showOrHide");
 		if(nameelement==null)
 			return false;
 		else{
 			name=nameelement.text();
-			
+			String weeknumtxt=weeknumele.text();
+			int a=weeknumtxt.indexOf("教");
+			weeknum=Integer.valueOf(weeknumtxt.substring(1, a));
 			return true;	
 		}
 	}
