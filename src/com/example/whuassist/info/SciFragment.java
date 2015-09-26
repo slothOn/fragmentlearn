@@ -111,17 +111,16 @@ public class SciFragment extends Fragment implements OnRefreshListener
 			// TODO Auto-generated method stub
 			//showProgressDlg();
 			swipe.setRefreshing(true);
+			WhuUtil.scititle.clear();
 		}
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			// TODO Auto-generated method stub
-			
-			if(WhuUtil.scititle.size()==0){
-				WhuUtil.requestIndexpage();
-			}
+			WhuUtil.requestIndexpage();
 			if(WhuUtil.scititle.size()!=0){
 				return true;
 			}else{
+				queryDataFromdb();
 				return false;
 			}
 		}

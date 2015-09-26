@@ -111,17 +111,17 @@ public class NotfcFragment extends Fragment implements OnRefreshListener
 			// TODO Auto-generated method stub
 			//showProgressDlg();
 			swipe.setRefreshing(true);
+			WhuUtil.notfctitle.clear();
 		}
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			// TODO Auto-generated method stub
 			
-			if(WhuUtil.notfctitle.size()==0){
-				WhuUtil.requestIndexpage();
-			}
+			WhuUtil.requestIndexpage();
 			if(WhuUtil.notfctitle.size()!=0){
 				return true;
 			}else{
+				queryDataFromdb();
 				return false;
 			}
 		}
