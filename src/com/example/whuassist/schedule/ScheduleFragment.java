@@ -63,8 +63,8 @@ public class ScheduleFragment extends Fragment {
 			@Override
 			public Fragment getItem(int position) {
 				// TODO Auto-generated method stub
-				if(position>=fraglist.size()){
-					fraglist.add(new DayTimeFragment(position));
+				while(position>=fraglist.size()){
+					fraglist.add(new DayTimeFragment(fraglist.size()));
 				}
 				return fraglist.get(position);
 			}
