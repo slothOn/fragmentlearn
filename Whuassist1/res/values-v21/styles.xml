@@ -2,5 +2,7 @@
 <resources>
     <style name="AppTheme" parent="AppBaseTheme">
         <item name="android:statusBarColor">@color/material_blue_700</item>
+         <!-- 底部导航栏颜色 -->  
+        <item name="android:navigationBarColor">#4876FF</item>  
     </style>
 </resources>

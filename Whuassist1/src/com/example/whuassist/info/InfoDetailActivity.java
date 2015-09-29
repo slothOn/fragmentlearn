@@ -6,24 +6,27 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import com.example.whuassist.R;
-import com.example.whuassist.WhuUtil;
-
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
-import android.widget.Toolbar;
+
+import com.example.whuassist.R;
+import com.example.whuassist.WhuUtil;
 
 public class InfoDetailActivity extends Activity implements OnRefreshListener{
 	String detailurl;
 	WebView webview;
 	SwipeRefreshLayout swipe;
 	String webhtml;
+	Toolbar mtoolbar;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +39,26 @@ public class InfoDetailActivity extends Activity implements OnRefreshListener{
 		swipe.setColorSchemeResources(android.R.color.holo_blue_bright,
 				android.R.color.holo_green_light, android.R.color.holo_orange_light, 
 				android.R.color.holo_red_light);
-		
+		/*
+		mtoolbar=(Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(mtoolbar);
+		mtoolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {  
+		    @Override  
+		    public boolean onMenuItemClick(MenuItem item) {  
+		        switch (item.getItemId()) {  
+		        case R.id.action_settings:  
+		            Toast.makeText(getApplicationContext(), "action_settings", 0).show();  
+		            break;  
+		        case R.id.action_share:  
+		            Toast.makeText(getApplicationContext(), "action_share", 0).show();  
+		            break;  
+		        default:  
+		            break;  
+		        }  
+		        return true;  
+		    }  
+		});  
+		*/
 		detailurl=getIntent().getStringExtra("DetailUrl");
 				
 		webview.setWebViewClient(new WebViewClient(){
