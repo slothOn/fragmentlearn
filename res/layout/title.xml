@@ -12,6 +12,6 @@
         android:textColor="#ffffff"
         android:textSize="20sp"  
         android:textStyle="bold"
-        android:text="武大助手"/>
+        android:text="武大资环"/>
 
 </LinearLayout>

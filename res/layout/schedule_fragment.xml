@@ -2,6 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+     <Spinner
+        android:id="@+id/id_weeknum"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:entries="@array/weekindex"
+        android:paddingBottom="10dp"/>
 	 <ProgressBar
         android:id="@+id/schedule_progressbar"
         android:layout_width="100dp"
@@ -12,6 +18,7 @@
 	    android:id="@+id/id_dayspager"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
+	    android:layout_below="@id/id_weeknum"
 	    >
 	</android.support.v4.view.ViewPager>
 </RelativeLayout>

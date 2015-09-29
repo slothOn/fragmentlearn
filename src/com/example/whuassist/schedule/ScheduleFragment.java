@@ -14,8 +14,11 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.whuassist.MainActivity;
@@ -34,6 +37,7 @@ public class ScheduleFragment extends Fragment {
     MyPagerAdapter adapter;
     ScheduleTableHelper sdbhelper;
     ProgressBar prgbar;
+    Spinner weektip;
     
     @Override
     public void onAttach(Activity activity) {
@@ -41,7 +45,6 @@ public class ScheduleFragment extends Fragment {
     	super.onAttach(activity);
     	//数据库不存在则新建
 		sdbhelper=new ScheduleTableHelper(getActivity(),"WHU"+MainActivity.Account+"schedule.db",null,1);
-    	
     };
     
 	@Override
@@ -51,7 +54,22 @@ public class ScheduleFragment extends Fragment {
 		View v=inflater.inflate(R.layout.schedule_fragment, container, false);
 		mdayspager=(ViewPager) v.findViewById(R.id.id_dayspager);
 		prgbar=(ProgressBar) v.findViewById(R.id.schedule_progressbar);
-		
+		weektip=(Spinner) v.findViewById(R.id.id_weeknum);
+		weektip.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				mdayspager.setCurrentItem(position);
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		adapter=new MyPagerAdapter(getChildFragmentManager()) {
 			
 			@Override
@@ -75,7 +93,7 @@ public class ScheduleFragment extends Fragment {
 			@Override
 			public void onPageSelected(int arg0) {
 				// TODO Auto-generated method stub
-				
+				weektip.setSelection(arg0);
 			}
 			
 			@Override
@@ -163,6 +181,7 @@ public class ScheduleFragment extends Fragment {
 			super.onPostExecute(result);
 			if(result){
 				mdayspager.setCurrentItem(WhuUtil.weeknum-1);
+				weektip.setSelection(WhuUtil.weeknum-1);
 				adapter.notifyDataSetChanged();
 			}else{
 				Toast.makeText(getActivity(), "网络错误", Toast.LENGTH_LONG).show();
