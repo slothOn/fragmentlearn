@@ -17,6 +17,7 @@ import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 public class InfoDetailActivity extends Activity implements OnRefreshListener{
 	String detailurl;

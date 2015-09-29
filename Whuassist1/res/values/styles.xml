@@ -6,11 +6,7 @@
     -->
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
        	<!-- customize the color palette -->
-       	<item name="windowActionBar">false</item>
-		<item name="android:windowNoTitle">true</item>
-        <item name="android:colorPrimary">@color/material_blue_500</item>
-        <item name="android:colorPrimaryDark">@color/material_blue_700</item>
-        <item name="android:colorAccent">@color/material_green_A200</item>
+      
     </style>
 
     <!-- Application theme. -->
