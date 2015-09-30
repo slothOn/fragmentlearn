@@ -69,7 +69,8 @@ public class NewsFragment extends Fragment implements OnRefreshListener
 	private SwipeRefreshLayout swipe;
 	private RadioButton[] rbtns;
 	private ListView newslist;
-	private ArrayAdapter<TitleModel> nadapter;
+	//private ArrayAdapter<TitleModel> nadapter;
+	private TitleAdapter nadapter;
 	InfoTableHelper nth;
 	
 	//ArrayList<NewsTitleModel> test=new ArrayList<NewsTitleModel>();
@@ -78,9 +79,8 @@ public class NewsFragment extends Fragment implements OnRefreshListener
 		// TODO Auto-generated method stub
 		super.onAttach(activity);
 		//test.add(new NewsTitleModel("test","test","test"));test.add(new NewsTitleModel("test","test","test"));
-		nadapter=new ArrayAdapter<TitleModel>(getActivity(), 
-				android.R.layout.simple_list_item_1,WhuUtil.newstitle);
-		
+		//nadapter=new ArrayAdapter<TitleModel>(getActivity(), android.R.layout.simple_list_item_1,WhuUtil.newstitle);
+		nadapter=new TitleAdapter(getActivity(), R.layout.layout_news_item, WhuUtil.newstitle);
 		nth=new InfoTableHelper(getActivity(), "ZihuanNews", null, 1);
 	}
 	
@@ -277,7 +277,7 @@ public class NewsFragment extends Fragment implements OnRefreshListener
 				nadapter.notifyDataSetChanged();
 				saveNews2db();
 			}else{
-				Toast.makeText(getActivity(), "ÍøÂç´íÎó", Toast.LENGTH_LONG).show();
+				Toast.makeText(getActivity().getApplicationContext(), "ÍøÂç´íÎó", Toast.LENGTH_LONG).show();
 			}
 			swipe.setRefreshing(false);
 		}

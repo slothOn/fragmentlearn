@@ -14,8 +14,10 @@ import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.whuassist.R;
@@ -33,6 +35,7 @@ public class InfoDetailActivity extends Activity implements OnRefreshListener{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_newsdetail);
+	
 		webview=(WebView) findViewById(R.id.id_newsdetail);
 		swipe=(SwipeRefreshLayout) findViewById(R.id.ctnt_refresh);
 		swipe.setOnRefreshListener(this);
@@ -131,6 +134,7 @@ public class InfoDetailActivity extends Activity implements OnRefreshListener{
 			}else{
 				Toast.makeText(getApplicationContext(), "ÍøÂç´íÎó", Toast.LENGTH_LONG).show();
 			}
+			
 			swipe.setRefreshing(false);
 		}
 	}

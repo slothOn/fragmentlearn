@@ -184,7 +184,7 @@ public class ScheduleFragment extends Fragment {
 				weektip.setSelection(WhuUtil.weeknum-1);
 				adapter.notifyDataSetChanged();
 			}else{
-				Toast.makeText(getActivity(), "网络错误", Toast.LENGTH_LONG).show();
+				Toast.makeText(getActivity().getApplicationContext(), "网络错误", Toast.LENGTH_LONG).show();
 			}
 			//把服务器数据写回数据库
 			saveSchedule2db();

@@ -200,7 +200,7 @@ public class ScoreFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 				//把服务器数据写回数据库
 				saveScore2db();
 			}else{
-				Toast.makeText(getActivity(), "网络错误", Toast.LENGTH_LONG).show();
+				Toast.makeText(getActivity().getApplicationContext(), "网络错误", Toast.LENGTH_LONG).show();
 			}
 			
 			//closeProgressDlg();

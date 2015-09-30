@@ -88,7 +88,7 @@ public class FuncActivity extends Activity implements OnClickListener{
 		default:
 			break;
 		}
-		//tr.addToBackStack(null);
+		
 		tr.commit();
 	}
 	private void resetimg() {

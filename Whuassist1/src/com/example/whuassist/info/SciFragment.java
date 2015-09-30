@@ -33,16 +33,16 @@ public class SciFragment extends Fragment implements OnRefreshListener
 {
 	SwipeRefreshLayout swipe;
 	ListView mlist;
-	private ArrayAdapter<TitleModel> madapter;
+	//private ArrayAdapter<TitleModel> madapter;
+	private TitleAdapter madapter;
 	InfoTableHelper nth;
 	
 	@Override
 	public void onAttach(Activity activity) {
 		// TODO Auto-generated method stub
 		super.onAttach(activity);
-		madapter=new ArrayAdapter<TitleModel>(getActivity(), 
-				android.R.layout.simple_list_item_1,WhuUtil.scititle);
-		
+		//madapter=new ArrayAdapter<TitleModel>(getActivity(), android.R.layout.simple_list_item_1,WhuUtil.scititle);
+		madapter=new TitleAdapter(getActivity(), R.layout.layout_news_item, WhuUtil.scititle);
 		nth=new InfoTableHelper(getActivity(), "ZihuanNews", null, 1);
 	}
 	
@@ -138,7 +138,7 @@ public class SciFragment extends Fragment implements OnRefreshListener
 				madapter.notifyDataSetChanged();
 				saveSci2db();
 			}else{
-				Toast.makeText(getActivity(), "ÍøÂç´íÎó", Toast.LENGTH_LONG).show();
+				Toast.makeText(getActivity().getApplicationContext(), "ÍøÂç´íÎó", Toast.LENGTH_LONG).show();
 			}
 			swipe.setRefreshing(false);
 		}
