@@ -1,6 +1,7 @@
 package com.example.whuassist.info;
 
 
+import com.example.whuassist.MyApplication;
 import com.example.whuassist.R;
 import com.example.whuassist.WhuUtil;
 import com.example.whuassist.R.id;
@@ -102,7 +103,15 @@ public class SciFragment extends Fragment implements OnRefreshListener
 	}
 	
 	public void updateSciFromServer(){
-		new DownloadSciTask().execute();
+		swipe.post(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				swipe.setRefreshing(true);
+			}
+		});
+		onRefresh();
 	}
 	
 	class DownloadSciTask extends AsyncTask<Void, Integer, Boolean>{
@@ -110,7 +119,7 @@ public class SciFragment extends Fragment implements OnRefreshListener
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			//showProgressDlg();
-			swipe.setRefreshing(true);
+			//swipe.setRefreshing(true);
 			WhuUtil.scititle.clear();
 		}
 		@Override
@@ -138,7 +147,7 @@ public class SciFragment extends Fragment implements OnRefreshListener
 				madapter.notifyDataSetChanged();
 				saveSci2db();
 			}else{
-				Toast.makeText(getActivity().getApplicationContext(), "ÍøÂç´íÎó", Toast.LENGTH_LONG).show();
+				Toast.makeText(MyApplication.getWhuContext(), "ÍøÂç´íÎó", Toast.LENGTH_LONG).show();
 			}
 			swipe.setRefreshing(false);
 		}
@@ -161,7 +170,7 @@ public class SciFragment extends Fragment implements OnRefreshListener
 	@Override
 	public void onRefresh() {
 		// TODO Auto-generated method stub
-		updateSciFromServer();
+		new DownloadSciTask().execute();
 	}
 	
 	@Override

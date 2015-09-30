@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.http.HttpResponse;
 
 import com.example.whuassist.MainActivity;
+import com.example.whuassist.MyApplication;
 import com.example.whuassist.R;
 import com.example.whuassist.WhuHttpUtil;
 import com.example.whuassist.WhuUtil;
@@ -150,7 +151,15 @@ public class ScoreFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 	}
 	//从服务器获取数据
 	public void queryScoreFromSever(){
-		new DownloadScoreTask().execute();
+		swiperefresh.post(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				swiperefresh.setRefreshing(true);
+			}
+		});
+		onRefresh();
 	}
 	//获取数据
 	public void queryScoreData(){
@@ -170,7 +179,7 @@ public class ScoreFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			//showProgressDlg();
-			swiperefresh.setRefreshing(true);
+			//swiperefresh.setRefreshing(true);
 		}
 		@Override
 		protected Boolean doInBackground(Void... params) {
@@ -200,7 +209,7 @@ public class ScoreFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 				//把服务器数据写回数据库
 				saveScore2db();
 			}else{
-				Toast.makeText(getActivity().getApplicationContext(), "网络错误", Toast.LENGTH_LONG).show();
+				Toast.makeText(MyApplication.getWhuContext(), "网络错误", Toast.LENGTH_LONG).show();
 			}
 			
 			//closeProgressDlg();
@@ -212,7 +221,7 @@ public class ScoreFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 	@Override
 	public void onRefresh() {
 		// TODO Auto-generated method stub
-		queryScoreFromSever();
+		new DownloadScoreTask().execute();
 	}
 
 }	

@@ -140,6 +140,7 @@ public class MainActivity extends Activity {
 					public void onFinish(String txt) {
 						// TODO Auto-generated method stub
 						Log.d("login", "successfully");
+						WhuUtil.admin.stunum=accout;
 						Account=accout;
 						if(WhuUtil.isLogin(txt)){
 							Intent i=new Intent(MainActivity.this,FuncActivity.class);

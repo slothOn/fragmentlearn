@@ -2,6 +2,7 @@ package com.example.whuassist;
 
 import com.example.whuassist.schedule.ScheduleFragment;
 import com.example.whuassist.score.ScoreFragment;
+import com.example.whuassist.setting.SettingFragment;
 
 import android.app.Activity;
 import android.app.Fragment;

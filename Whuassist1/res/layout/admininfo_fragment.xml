@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:background="#ffffff" 
+    android:orientation="horizontal"
+    android:layout_marginTop="10dp">
+	
+    <ImageView 
+        android:id="@+id/id_adminicon"
+        android:src="@drawable/default_admin_icon"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_margin="10dp"/>
+	<RelativeLayout 
+	    android:layout_height="match_parent"
+	    android:layout_width="match_parent"
+	    android:orientation="vertical"
+	    android:layout_gravity="center_vertical"
+	    android:layout_margin="10dp">
+	     <TextView
+	        android:id="@+id/id_adminname"
+	        android:textSize="36sp"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+			android:layout_marginLeft="30dp"  
+			android:layout_marginBottom="10dp"    
+	        android:text="尚未登录" 
+	        android:textColor="@color/material_blue_700"/>
+	     <TextView 
+	         android:id="@+id/id_adminnum"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:layout_marginLeft="30dp"   
+	         android:layout_below="@id/id_adminname"
+	         android:textSize="18sp"
+	         android:textColor="@color/material_blue_700"/>
+	</RelativeLayout>
+   
+
+</LinearLayout>

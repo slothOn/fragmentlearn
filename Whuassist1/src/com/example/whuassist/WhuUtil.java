@@ -24,13 +24,15 @@ import org.jsoup.select.Elements;
 import com.example.whuassist.info.TitleModel;
 import com.example.whuassist.schedule.Schedulemodel;
 import com.example.whuassist.score.Scoremodel;
+import com.example.whuassist.setting.AdminModel;
 
 import android.content.Context;
 import android.renderscript.Element;
 import android.util.Log;
 
 public class WhuUtil {
-	public static String name;
+	//public static String name;
+	public static AdminModel admin=new AdminModel();
 	public static int weeknum=1;
 	public static String[] picurl;
 	public static ArrayList<Scoremodel> courseScore=new ArrayList<Scoremodel>();
@@ -137,7 +139,7 @@ public class WhuUtil {
 		if(nameelement==null)
 			return false;
 		else{
-			name=nameelement.text();
+			admin.name=nameelement.text();
 			String weeknumtxt=weeknumele.text();
 			int a=weeknumtxt.indexOf("½Ì");
 			weeknum=Integer.valueOf(weeknumtxt.substring(1, a));

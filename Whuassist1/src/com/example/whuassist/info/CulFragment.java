@@ -1,6 +1,7 @@
 package com.example.whuassist.info;
 
 
+import com.example.whuassist.MyApplication;
 import com.example.whuassist.R;
 import com.example.whuassist.WhuUtil;
 import com.example.whuassist.R.id;
@@ -102,15 +103,22 @@ public class CulFragment extends Fragment implements OnRefreshListener
 	}
 	
 	public void updateCulFromServer(){
-		new DownloadCulTask().execute();
+		swipe.post(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				swipe.setRefreshing(true);
+			}
+		});
+		onRefresh();
 	}
 	
 	class DownloadCulTask extends AsyncTask<Void, Integer, Boolean>{
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
-			//showProgressDlg();
-			swipe.setRefreshing(true);
+			//showProgressDlg();		
 			WhuUtil.cultitle.clear();
 		}
 		@Override
@@ -139,7 +147,7 @@ public class CulFragment extends Fragment implements OnRefreshListener
 				madapter.notifyDataSetChanged();
 				saveCul2db();
 			}else{
-				Toast.makeText(getActivity().getApplicationContext(), "ÍøÂç´íÎó", Toast.LENGTH_LONG).show();
+				Toast.makeText(MyApplication.getWhuContext(), "ÍøÂç´íÎó", Toast.LENGTH_LONG).show();
 			}
 			swipe.setRefreshing(false);
 		}
@@ -162,7 +170,7 @@ public class CulFragment extends Fragment implements OnRefreshListener
 	@Override
 	public void onRefresh() {
 		// TODO Auto-generated method stub
-		updateCulFromServer();
+		new DownloadCulTask().execute();
 	}
 	
 	@Override

@@ -20,6 +20,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.whuassist.MyApplication;
 import com.example.whuassist.R;
 import com.example.whuassist.WhuUtil;
 
@@ -73,7 +74,15 @@ public class InfoDetailActivity extends Activity implements OnRefreshListener{
 			}
 		});
 		
-		new DownloadNewsDetailTask().execute(detailurl);
+		swipe.post(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				swipe.setRefreshing(true);
+			}
+		});
+		onRefresh();
 	}
 	@Override
 	public void onRefresh() {
@@ -86,7 +95,6 @@ public class InfoDetailActivity extends Activity implements OnRefreshListener{
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
-			swipe.setRefreshing(true);
 			super.onPreExecute();
 		}
 		@Override
@@ -132,7 +140,7 @@ public class InfoDetailActivity extends Activity implements OnRefreshListener{
 			if(result){
 				webview.loadDataWithBaseURL(null, webhtml, "text/html", "gbk", null);
 			}else{
-				Toast.makeText(getApplicationContext(), "ÍøÂç´íÎó", Toast.LENGTH_LONG).show();
+				Toast.makeText(MyApplication.getWhuContext(), "ÍøÂç´íÎó", Toast.LENGTH_LONG).show();
 			}
 			
 			swipe.setRefreshing(false);

@@ -22,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.whuassist.MainActivity;
+import com.example.whuassist.MyApplication;
 import com.example.whuassist.MyPagerAdapter;
 import com.example.whuassist.R;
 import com.example.whuassist.WhuHttpUtil;
@@ -184,7 +185,7 @@ public class ScheduleFragment extends Fragment {
 				weektip.setSelection(WhuUtil.weeknum-1);
 				adapter.notifyDataSetChanged();
 			}else{
-				Toast.makeText(getActivity().getApplicationContext(), "网络错误", Toast.LENGTH_LONG).show();
+				Toast.makeText(MyApplication.getWhuContext(), "网络错误", Toast.LENGTH_LONG).show();
 			}
 			//把服务器数据写回数据库
 			saveSchedule2db();

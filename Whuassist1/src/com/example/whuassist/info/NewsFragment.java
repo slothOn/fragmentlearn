@@ -17,6 +17,7 @@ import java.util.TimerTask;
 
 import org.apache.http.util.EntityUtils;
 
+import com.example.whuassist.MyApplication;
 import com.example.whuassist.R;
 import com.example.whuassist.Tool;
 import com.example.whuassist.WhuHttpUtil;
@@ -240,7 +241,15 @@ public class NewsFragment extends Fragment implements OnRefreshListener
 	}
 	
 	public void updateNewsFromServer(){
-		new DownloadNewsTask().execute();
+		swipe.post(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				swipe.setRefreshing(true);
+			}
+		});
+		onRefresh();
 	}
 	
 	class DownloadNewsTask extends AsyncTask<Void, Integer, Boolean>{
@@ -248,7 +257,7 @@ public class NewsFragment extends Fragment implements OnRefreshListener
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			//showProgressDlg();
-			swipe.setRefreshing(true);
+			//swipe.setRefreshing(true);
 		}
 		@Override
 		protected Boolean doInBackground(Void... params) {
@@ -277,7 +286,7 @@ public class NewsFragment extends Fragment implements OnRefreshListener
 				nadapter.notifyDataSetChanged();
 				saveNews2db();
 			}else{
-				Toast.makeText(getActivity().getApplicationContext(), "ÍøÂç´íÎó", Toast.LENGTH_LONG).show();
+				Toast.makeText(MyApplication.getWhuContext(), "ÍøÂç´íÎó", Toast.LENGTH_LONG).show();
 			}
 			swipe.setRefreshing(false);
 		}
@@ -361,7 +370,7 @@ public class NewsFragment extends Fragment implements OnRefreshListener
 	@Override
 	public void onRefresh() {
 		// TODO Auto-generated method stub
-		updateNewsFromServer();
+		new DownloadNewsTask().execute();
 	}
 	
 }
