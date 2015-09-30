@@ -23,7 +23,8 @@
             </intent-filter>
         </activity>
         <activity 
-            android:name=".info.InfoDetailActivity"></activity>
+            android:name=".info.InfoDetailActivity"
+            android:theme="@style/AppBaseTheme"></activity>
         <activity 
             android:name=".FuncActivity"></activity>
         <service 
