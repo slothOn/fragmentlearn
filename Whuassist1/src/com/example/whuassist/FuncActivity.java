@@ -105,5 +105,6 @@ public class FuncActivity extends Activity implements OnClickListener{
 		super.onStop();
 		WhuUtil.courseScore.clear();
 		WhuUtil.newstitle.clear();
+		WhuUtil.courseSchedule.clear();
 	}
 }

@@ -120,7 +120,7 @@ public class ScheduleFragment extends Fragment {
 	public void queryScheduleData(){
 		try {
 			queryScheduleFromdb();
-			if(WhuUtil.courseScore.size()==0){
+			if(WhuUtil.courseSchedule.size()==0){
 				queryScheduleFromServer();
 			}
 		} catch (Exception e) {
@@ -134,16 +134,17 @@ public class ScheduleFragment extends Fragment {
 		SQLiteDatabase sdb=sdbhelper.getWritableDatabase();
 		Cursor cursor=sdb.rawQuery("select * from Schedule", null);
 		if(cursor.moveToFirst()){
-			do {
-				
+			do {			
 				String id=cursor.getString(cursor.getColumnIndex("id"));
 				String name=cursor.getString(cursor.getColumnIndex("name"));
-				String timetxt=cursor.getString(cursor.getColumnIndex("timetxt"));
+				String timetxt=cursor.getString(cursor.getColumnIndex("time"));
 				WhuUtil.courseSchedule.add(WhuUtil.parse2Schedulemodel(id, name, timetxt));
 				
 			} while (cursor.moveToNext());
 		}
-		
+		mdayspager.setCurrentItem(WhuUtil.weeknum-1);
+		weektip.setSelection(WhuUtil.weeknum-1);
+		adapter.notifyDataSetChanged();
 	}
 	
 	public void queryScheduleFromServer(){
