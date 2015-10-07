@@ -40,14 +40,6 @@ public class ScheduleFragment extends Fragment {
     ProgressBar prgbar;
     Spinner weektip;
     
-    @Override
-    public void onAttach(Activity activity) {
-		// TODO Auto-generated method stub
-    	super.onAttach(activity);
-    	//数据库不存在则新建
-		sdbhelper=new ScheduleTableHelper(getActivity(),"WHU"+MainActivity.Account+"schedule.db",null,1);
-    };
-    
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -110,6 +102,9 @@ public class ScheduleFragment extends Fragment {
 			}
 		});
 		
+		//数据库不存在则新建
+		sdbhelper=new ScheduleTableHelper(getActivity(),
+				"WHU"+WhuUtil.admin.name+"schedule.db",null,1);
 		if(WhuUtil.courseSchedule.size()==0){
 			queryScheduleData();
 		}
@@ -123,6 +118,7 @@ public class ScheduleFragment extends Fragment {
 			if(WhuUtil.courseSchedule.size()==0){
 				queryScheduleFromServer();
 			}
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 			queryScheduleFromServer();
@@ -142,9 +138,12 @@ public class ScheduleFragment extends Fragment {
 				
 			} while (cursor.moveToNext());
 		}
-		mdayspager.setCurrentItem(WhuUtil.weeknum-1);
-		weektip.setSelection(WhuUtil.weeknum-1);
-		adapter.notifyDataSetChanged();
+		if(WhuUtil.courseSchedule.size()!=0){
+			mdayspager.setCurrentItem(WhuUtil.weeknum-1);
+			weektip.setSelection(WhuUtil.weeknum-1);
+			adapter.notifyDataSetChanged();
+		}
+		
 	}
 	
 	public void queryScheduleFromServer(){
@@ -185,8 +184,9 @@ public class ScheduleFragment extends Fragment {
 				mdayspager.setCurrentItem(WhuUtil.weeknum-1);
 				weektip.setSelection(WhuUtil.weeknum-1);
 				adapter.notifyDataSetChanged();
+				
 			}else{
-				Toast.makeText(MyApplication.getWhuContext(), "网络错误", Toast.LENGTH_LONG).show();
+				Toast.makeText(MyApplication.getWhuContext(), "刷新课表错误", Toast.LENGTH_LONG).show();
 			}
 			//把服务器数据写回数据库
 			saveSchedule2db();

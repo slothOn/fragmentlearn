@@ -145,7 +145,7 @@ public class NotfcFragment extends Fragment implements OnRefreshListener
 				madapter.notifyDataSetChanged();
 				saveNotfc2db();
 			}else{
-				Toast.makeText(MyApplication.getWhuContext(), "ÍøÂç´íÎó", Toast.LENGTH_LONG).show();
+				Toast.makeText(MyApplication.getWhuContext(), "Ë¢ĞÂÍ¨Öª´íÎó", Toast.LENGTH_LONG).show();
 			}
 			swipe.setRefreshing(false);
 		}

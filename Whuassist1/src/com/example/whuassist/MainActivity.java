@@ -32,7 +32,8 @@ public class MainActivity extends Activity {
     private final static int GET_BMPKEY=0;
 	private final static int LOGIN_ERR=1;
     private final static int SHUAXIN_KEY=2;
-    public static String Account;
+    //public static String Account;
+    public String Account;
     
 	private EditText nameedit;
     private EditText passwordedit;

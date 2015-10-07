@@ -147,7 +147,7 @@ public class CulFragment extends Fragment implements OnRefreshListener
 				madapter.notifyDataSetChanged();
 				saveCul2db();
 			}else{
-				Toast.makeText(MyApplication.getWhuContext(), "ÍøÂç´íÎó", Toast.LENGTH_LONG).show();
+				Toast.makeText(MyApplication.getWhuContext(), "Ë¢ĞÂÅàÑø´íÎó", Toast.LENGTH_LONG).show();
 			}
 			swipe.setRefreshing(false);
 		}

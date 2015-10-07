@@ -54,10 +54,11 @@ public class ScoreFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     public void onAttach(Activity activity) {
 		// TODO Auto-generated method stub
     	super.onAttach(activity);
-    	//数据库不存在则新建
-		sdbhelper=new ScoreTableHelper(getActivity(),"WHU"+MainActivity.Account+".db",null,1);
-    	adapter=new ArrayAdapter<Scoremodel>(activity,
-    			android.R.layout.simple_list_item_1,WhuUtil.courseScore);
+    	/*
+    	if(WhuUtil.admin.name==null){
+    		Toast.makeText(MyApplication.getWhuContext(), "尚未登录", Toast.LENGTH_LONG).show();
+       	}
+    	*/
     };
    
 	@Override
@@ -75,7 +76,6 @@ public class ScoreFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 		listview=(ListView)v.findViewById(R.id.score_list);
 		btn_GPA=(Button)v.findViewById(R.id.btn_compute);
 		GPAshow=(TextView)v.findViewById(R.id.show_score);
-
         btn_GPA.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -106,12 +106,17 @@ public class ScoreFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 			}
 		});
         
-		listview.setAdapter(adapter);
+        adapter=new ArrayAdapter<Scoremodel>(getActivity(),
+    			android.R.layout.simple_list_item_1,WhuUtil.courseScore);
+        listview.setAdapter(adapter);
 		
+        //数据库不存在则新建
+    	sdbhelper=new ScoreTableHelper(getActivity(),"WHU"+WhuUtil.admin.name+".db",null,1);
+    	
 		if(WhuUtil.courseScore.size()==0){
 			queryScoreData();
 		}
-	
+		
 		return v;
 	}
 	public void onSaveInstanceState(Bundle outState) {
@@ -209,7 +214,7 @@ public class ScoreFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 				//把服务器数据写回数据库
 				saveScore2db();
 			}else{
-				Toast.makeText(MyApplication.getWhuContext(), "网络错误", Toast.LENGTH_LONG).show();
+				Toast.makeText(MyApplication.getWhuContext(), "刷新成绩错误", Toast.LENGTH_LONG).show();
 			}
 			
 			//closeProgressDlg();

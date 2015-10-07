@@ -147,7 +147,7 @@ public class SciFragment extends Fragment implements OnRefreshListener
 				madapter.notifyDataSetChanged();
 				saveSci2db();
 			}else{
-				Toast.makeText(MyApplication.getWhuContext(), "ÍøÂç´íÎó", Toast.LENGTH_LONG).show();
+				Toast.makeText(MyApplication.getWhuContext(), "Ë¢ĞÂ¿ÆÑĞ´íÎó", Toast.LENGTH_LONG).show();
 			}
 			swipe.setRefreshing(false);
 		}

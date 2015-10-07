@@ -129,11 +129,8 @@ public class NewsFragment extends Fragment implements OnRefreshListener
     	}
     	addEvn();
     	newslist.setAdapter(nadapter);
-    	queryDataFromdb();
-    	if(WhuUtil.newstitle.size()==0){
-    		updateNewsFromServer();
-    	}
     	
+    	queryNewsData();
     	newslist.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -146,7 +143,7 @@ public class NewsFragment extends Fragment implements OnRefreshListener
 				startActivity(i);
 			}
 		});
-    	
+    	autogallery();
 		return v;
 	}
 	
@@ -178,19 +175,21 @@ public class NewsFragment extends Fragment implements OnRefreshListener
 		}
 		nadapter.notifyDataSetChanged();
 	}
-
+	/*
 	 @Override
 	public void onResume() {
     	// TODO Auto-generated method stub
     	super.onResume();
+    	
     	queryDataFromdb();
     	if(WhuUtil.newstitle.size()==0){
     		updateNewsFromServer();
     	}
+    	
     	nadapter.notifyDataSetChanged();
     	autogallery();
     }
-		
+	*/	
   //添加事件
   	void addEvn(){
   		myGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -286,7 +285,7 @@ public class NewsFragment extends Fragment implements OnRefreshListener
 				nadapter.notifyDataSetChanged();
 				saveNews2db();
 			}else{
-				Toast.makeText(MyApplication.getWhuContext(), "网络错误", Toast.LENGTH_LONG).show();
+				Toast.makeText(MyApplication.getWhuContext(), "刷新新闻错误", Toast.LENGTH_LONG).show();
 			}
 			swipe.setRefreshing(false);
 		}
